@@ -1,0 +1,2 @@
+# pytest-datadir
+pytest plugin for manipulating test data directories and files
