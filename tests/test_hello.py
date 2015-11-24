@@ -1,4 +1,4 @@
-import os 
+import os
 
 
 def test_read_hello(datadir):
