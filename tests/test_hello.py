@@ -32,3 +32,12 @@ def test_read_spam_from_other_dir(datadir):
         contents = fp.read()
     assert contents == 'eggs\n'
     assert contents == datadir.read('spam.txt')
+
+
+def test_file_override(datadir):
+    """ The same file is in the module dir and global data.
+        Module files take precedence over global dir"""
+    filename = datadir['over.txt']
+    with open(filename) as fp:
+        contents = fp.read()
+    assert contents == '9000\n'
