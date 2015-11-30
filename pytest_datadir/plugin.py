@@ -6,15 +6,21 @@ import pytest
 
 class TestDataDir(object):
 
-    def __init__(self, data_dir, tmpdir):
-        self.data_dir = data_dir
+    def __init__(self, global_dir, module_dir, tmpdir):
+        self.global_dir = global_dir
+        self.module_dir = module_dir
         self.tmpdir = tmpdir.strpath
+        assert os.path.isdir(self.module_dir) or os.path.isdir(self.global_dir),\
+            'neither {} or {} are valid data directories'.format(self.global_dir, self.module_dir)
 
     def __getitem__(self, filename):
-        srcpath = os.path.join(self.data_dir, filename)
-        temppath = os.path.join(self.tmpdir, filename) 
-        if os.path.isfile(srcpath):
-            shutil.copy(srcpath, temppath)
+        module_srcpath = os.path.join(self.module_dir, filename)
+        global_srcpath = os.path.join(self.global_dir, filename)
+        temppath = os.path.join(self.tmpdir, filename)
+        if os.path.isfile(module_srcpath):
+            shutil.copy(module_srcpath, temppath)
+        elif os.path.isfile(global_srcpath):
+            shutil.copy(global_srcpath, temppath)
         return temppath
 
     def read(self, filename):
@@ -24,10 +30,9 @@ class TestDataDir(object):
 
 @pytest.fixture
 def datadir(request, tmpdir):
-    data_dir = os.path.join(request.fspath.dirname,
-                            request.module.__name__)
-    assert os.path.isdir(data_dir), 'invalid data dir: {}'.format(data_dir)
-    test_data_dir = TestDataDir(data_dir, tmpdir)
+    base_dir = request.fspath.dirname
+    module_dir = os.path.join(request.fspath.dirname,
+                              request.module.__name__)
+    global_dir = os.path.join(base_dir, 'data')
+    test_data_dir = TestDataDir(global_dir, module_dir, tmpdir)
     return test_data_dir
-
-
