@@ -32,7 +32,7 @@ class TestDataDir(object):
 def datadir(request, tmpdir):
     base_dir = request.fspath.dirname
     module_dir = os.path.join(request.fspath.dirname,
-                              request.module.__name__)
+                              os.path.splitext(request.module.__file__)[0])
     global_dir = os.path.join(base_dir, 'data')
     test_data_dir = TestDataDir(global_dir, module_dir, tmpdir)
     return test_data_dir
