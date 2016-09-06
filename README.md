@@ -1,9 +1,16 @@
 # pytest-datadir
-pytest plugin for manipulating test data directories and files
+
+pytest plugin for manipulating test data directories and files.
+
+[![Build Status](https://travis-ci.org/gabrielcnr/pytest-datadir.svg?branch=master)](https://travis-ci.org/gabrielcnr/pytest-datadir)
+[![PyPI](https://img.shields.io/pypi/v/pytest-datadir.svg)](https://pypi.python.org/pypi/pytest-datadir)
+[![PythonVersions](https://img.shields.io/pypi/pyversions/pytest-datadir.svg)](https://pypi.python.org/pypi/pytest-datadir)
+
 
 # Usage
 pytest-datadir will look up for a directory with the name of your module or the global 'data' folder.
 Let's say you have a structure like this:
+
 ```
 .
 ├── data/
@@ -12,6 +19,7 @@ Let's say you have a structure like this:
 │   └── spam.txt
 └── test_hello.py
 ```
+
 You can access the contents of these files using the dependency injected datadir variable:
 
 ```python
