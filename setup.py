@@ -23,6 +23,7 @@ setup(
     description='pytest plugin for test data directories and files',
     license='MIT',
     keywords='pytest test unittest directory file',
+    extras_require={':python_version<"3.4"': ['pathlib']},
     url='http://github.com/gabrielcnr/pytest-datadir',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
