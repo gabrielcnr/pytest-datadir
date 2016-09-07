@@ -19,8 +19,12 @@ class TestDataDir(object):
         temppath = os.path.join(self.tmpdir, filename)
         if os.path.isfile(module_srcpath):
             shutil.copy(module_srcpath, temppath)
+        elif os.path.isdir(module_srcpath):
+            shutil.copytree(module_srcpath, temppath)
         elif os.path.isfile(global_srcpath):
             shutil.copy(global_srcpath, temppath)
+        elif os.path.isdir(global_srcpath):
+            shutil.copytree(global_srcpath, temppath)
         return temppath
 
     def read(self, filename):

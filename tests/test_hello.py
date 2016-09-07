@@ -41,3 +41,23 @@ def test_file_override(datadir):
     with open(filename) as fp:
         contents = fp.read()
     assert contents == '9000\n'
+
+
+def test_local_directory(datadir):
+    directory = datadir['local_directory']
+    assert os.path.isdir(directory)
+    filename = os.path.join(directory, 'file.txt')
+    assert os.path.isfile(filename)
+    with open(filename) as fp:
+        contents = fp.read()
+    assert contents == 'local contents'
+
+
+def test_global_directory(datadir):
+    directory = datadir['global_directory']
+    assert os.path.isdir(directory)
+    filename = os.path.join(directory, 'file.txt')
+    assert os.path.isfile(filename)
+    with open(filename) as fp:
+        contents = fp.read()
+    assert contents == 'global contents'
