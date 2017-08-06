@@ -6,7 +6,7 @@ import pytest
 
 
 @pytest.fixture
-def global_datadir(request):
+def shared_datadir(request):
     return pathlib.Path(request.fspath.dirname) / 'data'
 
 

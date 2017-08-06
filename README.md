@@ -12,11 +12,12 @@ Let's say you have a structure like this:
 │   └── spam.txt
 └── test_hello.py
 ```
-You can access the contents of these files using the dependency injected datadir variable:
+You can access the contents of these files using injected variables `datadir` (for *test_* folder) or `shared_datadir`
+(for *data* folder):
 
 ```python
-def test_read_global(datadir):
-    with open(datadir['hello.txt']) as fp:
+def test_read_global(shared_datadir):
+    with open(shared_datadir['hello.txt']) as fp:
         contents = fp.read()
     assert contents == 'Hello World!\n'
 

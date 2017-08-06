@@ -1,5 +1,6 @@
 import os
 
+pytest_plugins = 'pytest_datadir.plugin'
 
 def test_read_hello(datadir):
     assert set(os.listdir(str(datadir))) == {'hello.txt', 'over.txt'}
@@ -21,8 +22,8 @@ def test_modify_hello_does_not_affect_the_original(datadir, original_datadir):
         assert fp.read() == 'Modified text!\n'
 
 
-def test_read_spam_from_other_dir(global_datadir):
-    filename = global_datadir / 'spam.txt'
+def test_read_spam_from_other_dir(shared_datadir):
+    filename = shared_datadir / 'spam.txt'
     with open(str(filename)) as fp:
         contents = fp.read()
     assert contents == 'eggs\n'
