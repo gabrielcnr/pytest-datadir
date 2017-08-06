@@ -3,27 +3,27 @@ import os
 
 def test_read_hello(datadir):
     assert set(os.listdir(str(datadir))) == {'local_directory', 'hello.txt', 'over.txt'}
-    with open(str(datadir / 'hello.txt')) as fp:
+    with (datadir/'hello.txt').open() as fp:
         contents = fp.read()
     assert contents == 'Hello, world!\n'
 
 
 def test_change_test_files(datadir, original_datadir):
     filename = datadir / 'hello.txt'
-    with open(str(filename), 'w') as fp:
+    with filename.open('w') as fp:
         fp.write('Modified text!\n')
 
     original_filename = original_datadir / 'hello.txt'
-    with open(str(original_filename)) as fp:
+    with original_filename.open() as fp:
         assert fp.read() == 'Hello, world!\n'
 
-    with open(str(filename)) as fp:
+    with filename.open() as fp:
         assert fp.read() == 'Modified text!\n'
 
 
 def test_read_spam_from_other_dir(shared_datadir):
     filename = shared_datadir / 'spam.txt'
-    with open(str(filename)) as fp:
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'eggs\n'
 
@@ -43,7 +43,7 @@ def test_local_directory(datadir):
     assert directory.is_dir()
     filename = directory/'file.txt'
     assert filename.is_file()
-    with open(filename) as fp:
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'local contents'
 
@@ -52,7 +52,7 @@ def test_shared_directory(shared_datadir):
     assert os.path.isdir(shared_datadir)
     filename = shared_datadir/'shared_directory'/'file.txt'
     assert filename.is_file()
-    with open(filename) as fp:
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'global contents'
 
