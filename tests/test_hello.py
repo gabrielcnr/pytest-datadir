@@ -1,6 +1,5 @@
 import os
 
-pytest_plugins = 'pytest_datadir.plugin'
 
 def test_read_hello(datadir):
     assert set(os.listdir(str(datadir))) == {'local_directory', 'hello.txt', 'over.txt'}
