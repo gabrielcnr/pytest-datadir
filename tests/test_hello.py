@@ -49,7 +49,7 @@ def test_local_directory(datadir):
 
 
 def test_shared_directory(shared_datadir):
-    assert os.path.isdir(shared_datadir)
+    assert shared_datadir.is_dir()
     filename = shared_datadir/'shared_directory'/'file.txt'
     assert filename.is_file()
     with filename.open() as fp:
