@@ -1,63 +1,59 @@
+from __future__ import unicode_literals
 import os
 
 
 def test_read_hello(datadir):
-    filename = datadir['hello.txt']
-    with open(filename) as fp:
+    assert set(os.listdir(str(datadir))) == {'local_directory', 'hello.txt', 'over.txt'}
+    with (datadir/'hello.txt').open() as fp:
         contents = fp.read()
     assert contents == 'Hello, world!\n'
-    assert contents == datadir.read('hello.txt')
 
 
-def test_modify_hello_does_not_affect_the_original(datadir):
-    filename = datadir['hello.txt']
-    with open(filename, 'a') as fp:
-        fp.write('\nHello again!')
+def test_change_test_files(datadir, original_datadir):
+    filename = datadir / 'hello.txt'
+    with filename.open('w') as fp:
+        fp.write('Modified text!\n')
 
-    original_filename = os.path.join(datadir.module_dir, 'hello.txt')
-    with open(original_filename) as fp:
-        original_contents = fp.read()
+    original_filename = original_datadir / 'hello.txt'
+    with original_filename.open() as fp:
+        assert fp.read() == 'Hello, world!\n'
 
-    assert original_contents == 'Hello, world!\n'
-
-    with open(filename) as fp:
-        modified_contents = fp.read()
-
-    assert modified_contents == 'Hello, world!\n\nHello again!'
+    with filename.open() as fp:
+        assert fp.read() == 'Modified text!\n'
 
 
-def test_read_spam_from_other_dir(datadir):
-    filename = datadir['spam.txt']
-    with open(filename) as fp:
+def test_read_spam_from_other_dir(shared_datadir):
+    filename = shared_datadir / 'spam.txt'
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'eggs\n'
-    assert contents == datadir.read('spam.txt')
 
 
-def test_file_override(datadir):
+def test_file_override(shared_datadir, datadir):
     """ The same file is in the module dir and global data.
-        Module files take precedence over global dir"""
-    filename = datadir['over.txt']
-    with open(filename) as fp:
-        contents = fp.read()
-    assert contents == '9000\n'
+        Shared files are kept in a different temp directory"""
+    shared_filepath = shared_datadir/'over.txt'
+    private_filepath = datadir/'over.txt'
+    assert shared_filepath.is_file()
+    assert private_filepath.is_file()
+    assert shared_filepath != private_filepath
 
 
 def test_local_directory(datadir):
-    directory = datadir['local_directory']
-    assert os.path.isdir(directory)
-    filename = os.path.join(directory, 'file.txt')
-    assert os.path.isfile(filename)
-    with open(filename) as fp:
+    directory = datadir/'local_directory'
+    assert directory.is_dir()
+    filename = directory/'file.txt'
+    assert filename.is_file()
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'local contents'
 
 
-def test_global_directory(datadir):
-    directory = datadir['global_directory']
-    assert os.path.isdir(directory)
-    filename = os.path.join(directory, 'file.txt')
-    assert os.path.isfile(filename)
-    with open(filename) as fp:
+def test_shared_directory(shared_datadir):
+    assert shared_datadir.is_dir()
+    filename = shared_datadir/'shared_directory'/'file.txt'
+    assert filename.is_file()
+    with filename.open() as fp:
         contents = fp.read()
     assert contents == 'global contents'
+
