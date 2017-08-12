@@ -9,7 +9,7 @@ def test_read_hello(datadir):
     assert contents == 'Hello, world!\n'
 
 
-def test_change_test_files(datadir, original_datadir):
+def test_change_test_files(datadir, original_datadir, shared_datadir, request):
     filename = datadir / 'hello.txt'
     with filename.open('w') as fp:
         fp.write('Modified text!\n')
@@ -20,6 +20,14 @@ def test_change_test_files(datadir, original_datadir):
 
     with filename.open() as fp:
         assert fp.read() == 'Modified text!\n'
+
+    shared_filename = shared_datadir/'over.txt'
+    with shared_filename.open('w') as fp:
+        fp.write('changed')
+    shared_original = os.path.join(request.fspath.dirname, 'data', 'over.txt')
+    with open(shared_original) as fp:
+        assert fp.read().strip() == '8000'
+
 
 
 def test_read_spam_from_other_dir(shared_datadir):
