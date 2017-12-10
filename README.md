@@ -24,15 +24,16 @@ You can access the contents of these files using injected variables `datadir` (f
 
 ```python
 def test_read_global(shared_datadir):
-    with open(shared_datadir['hello.txt']) as fp:
-        contents = fp.read()
+    contents = (shared_datadir / 'hello.txt').read_text()
     assert contents == 'Hello World!\n'
 
 def test_read_module(datadir):
-    with open(datadir['spam.txt']) as fp:
-        contents = fp.read()
+    contents = (datadir / 'spam.txt').read_text()
     assert contents == 'eggs\n'
 ```
 
 pytest-datadir will copy the original file to a temporary folder, so changing the file contents won't change the original data file.
+
+Both `datadir` and `shared_datadir` fixtures are `pathlib.Path` objects.
+
 Happy testing!
