@@ -1,12 +1,16 @@
+import io
 import re
 
 from setuptools import setup
 
 
-with open('pytest_datadir/__init__.py') as fp:
+with io.open('pytest_datadir/__init__.py', encoding='UTF-8') as fp:
     m = re.search("version = '(.*)'", fp.read())
     assert m is not None
     version = m.group(1)
+
+with io.open('README.md', encoding='UTF-8') as fp:
+    long_description = fp.read()
 
 
 setup(
@@ -21,6 +25,9 @@ setup(
     author='Gabriel Reis',
     author_email='gabrielcnr@gmail.com',
     description='pytest plugin for test data directories and files',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+
     license='MIT',
     keywords='pytest test unittest directory file',
     extras_require={':python_version<"3.4"': ['pathlib']},
