@@ -21,5 +21,8 @@ def original_datadir(request):
 @pytest.fixture
 def datadir(original_datadir, tmpdir):
     result = pathlib.Path(str(tmpdir.join(original_datadir.stem)))
-    shutil.copytree(str(original_datadir), str(result))
+    if original_datadir.is_dir():
+        shutil.copytree(str(original_datadir), str(result))
+    else:
+        result.mkdir()
     return result
