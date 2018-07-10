@@ -2,8 +2,8 @@ pytest-datadir
 ==============
 
 
-(unreleased)
-------------
+1.1.0 (2018-07-10)
+------------------
 
 - If the data directory does not exist, the fixture will create an empty directory.
 
