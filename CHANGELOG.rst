@@ -2,8 +2,8 @@ pytest-datadir
 ==============
 
 
-(unreleased)
-------------
+1.2.0 (2018-07-11)
+------------------
 
 - Use ``pathlib2`` on Python 2.7: this is the proper backport of Python 3's standard
   library.
