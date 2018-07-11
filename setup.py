@@ -26,7 +26,7 @@ setup(
 
     license='MIT',
     keywords='pytest test unittest directory file',
-    extras_require={':python_version<"3.4"': ['pathlib']},
+    extras_require={':python_version<"3.4"': ['pathlib2']},
     url='http://github.com/gabrielcnr/pytest-datadir',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
