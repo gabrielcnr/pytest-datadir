@@ -59,3 +59,5 @@ target/
 
 # IDEs
 .idea/
+
+pytest_datadir/_version.py

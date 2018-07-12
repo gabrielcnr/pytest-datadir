@@ -10,7 +10,7 @@ with io.open('README.md', encoding='UTF-8') as fp:
 
 setup(
     name="pytest-datadir",
-    use_scm_version=True,
+    use_scm_version={"write_to": "pytest_datadir/_version.py"},
     setup_requires=['setuptools_scm'],
     packages=['pytest_datadir'],
     entry_points={
