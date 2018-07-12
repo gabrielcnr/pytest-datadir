@@ -2,6 +2,12 @@ pytest-datadir
 ==============
 
 
+1.2.1 (2018-07-12)
+------------------
+
+- Fix ``pytest_datadir.version`` attribute to point to the correct version.
+
+
 1.2.0 (2018-07-11)
 ------------------
 
