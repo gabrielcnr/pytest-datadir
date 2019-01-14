@@ -3,7 +3,7 @@ import os
 
 
 def test_read_hello(datadir):
-    assert set(os.listdir(str(datadir))) == {'local_directory', 'hello.txt', 'over.txt'}
+    assert set(os.listdir(str(datadir))) == {'local_directory', 'hello.txt', 'over.txt', 'a' * 250 + '.txt'}
     with (datadir/'hello.txt').open() as fp:
         contents = fp.read()
     assert contents == 'Hello, world!\n'
