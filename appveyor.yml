@@ -1,0 +1,13 @@
+init:
+  - git config --system core.longpaths true
+
+install:
+  - C:\Python37\python -m pip install -U pip
+  - C:\Python37\python -m pip install tox
+
+build: false
+
+test_script:
+  - C:\Python37\scripts\tox
+
+skip_tags: true
