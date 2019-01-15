@@ -1,6 +1,11 @@
 pytest-datadir
 ==============
 
+1.3.0 (2019-01-15)
+------------------
+
+- Add support for long path names on Windows (`#25 <https://github.com/gabrielcnr/pytest-datadir/pull/25>`__).
+
 
 1.2.1 (2018-07-12)
 ------------------
