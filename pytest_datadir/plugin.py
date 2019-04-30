@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+from copy import copy
 
 if sys.version_info[0] == 2:
     from pathlib2 import Path
@@ -29,84 +30,102 @@ def _win32_longpath(path):
 def original_datadir(request):
     return Path(os.path.splitext(request.module.__file__)[0])
 
+
 class DatadirFactory(object):
     """Factory class for generating datadir fixtures."""
 
-    # to produce a datadir give it a scope to produce it for and the
-    # name of the datadir relative to the request.fspath.dirname
-    def mkdatadir(self, scope='function', original_datadir='data'):
-        """Generate a datadir fixture with a custom scope and relative path to
-        the original datadir that is to be copied to the temporary directory."""
+    def __init__(self, request, tmp_path_factory):
 
-        @pytest.fixture(scope=scope)
-        def custom_datadir(request, tmp_path_factory):
+        self.tmp_path_factory = tmp_path_factory
+        self.request = request
 
-            # we want to get a closure of the original_datadir path
-            # from the surrounding call to the class method, but since
-            # this is a decorated function we can't do it with simple
-            # python closure syntax since it is in another lexical context
-            nonlocal original_datadir
+    def mkdatadir(self, original_datadir='data'):
 
-            # special condition if the datadir is specified as None, which
-            # automatically gets the path that matches the basename of the
-            # module we are in
-            if original_datadir is None:
-                original_datadir = Path(os.path.splitext(request.module.__file__)[0])
+        # special condition if the datadir is specified as None, which
+        # automatically gets the path that matches the basename of the
+        # module we are in
+        if original_datadir is None:
+            original_datadir = Path(os.path.splitext(self.request.module.__file__)[0])
 
 
-            # get the path to the shared data dir
-            original_path = Path(request.fspath.dirname) / original_datadir
+        # get the path to the shared data dir
+        original_path = Path(self.request.fspath.dirname) / original_datadir
 
-            # make sure that the path exists and it is a directory
-            if not original_path.exists():
-                raise ValueError("datadir path does not exist")
-            elif not original_path.is_dir():
-                raise ValueError("datadir path is not a directory")
+        # make sure that the path exists and it is a directory
+        if not original_path.exists():
+            raise ValueError("datadir path does not exist")
+        elif not original_path.is_dir():
+            raise ValueError("datadir path is not a directory")
 
-            # generate a base temporary directory and receive the path to it
-            temp_path = tmp_path_factory.mktemp('')
+        # generate a base temporary directory and receive the path to it
+        temp_path = self.tmp_path_factory.mktemp('')
 
-            # in order to use the shutil.copytree util the target directory
-            # must not exist so we specify a dir in the generated tempdir for it
-            temp_data_path = temp_path / 'data'
+        # in order to use the shutil.copytree util the target directory
+        # must not exist so we specify a dir in the generated tempdir for it
+        temp_data_path = temp_path / 'data'
 
-            # windows-ify the paths
-            original_path = Path(_win32_longpath(original_path))
-            temp_data_path = Path(_win32_longpath(str(temp_data_path)))
+        # windows-ify the paths
+        original_path = Path(_win32_longpath(original_path))
+        temp_data_path = Path(_win32_longpath(str(temp_data_path)))
 
-            # copy all the files in the original data dir to the temp
-            # dir
-            shutil.copytree(original_path, temp_data_path)
+        # copy all the files in the original data dir to the temp
+        # dir
+        shutil.copytree(original_path, temp_data_path)
 
-            return temp_data_path
+        return temp_data_path
 
-        return custom_datadir
+# scoped factories
+@pytest.fixture(scope='module')
+def module_datadir_factory(request, tmp_path_factory):
 
-# create a singleton factory
-datadir_factory = DatadirFactory()
+    return DatadirFactory(request, tmp_path_factory)
 
-# generate a fixture for the shared directory for each scope
-function_shared_datadir = datadir_factory.mkdatadir(scope='function')
-class_shared_datadir = datadir_factory.mkdatadir(scope='class')
-module_shared_datadir = datadir_factory.mkdatadir(scope='module')
-session_shared_datadir = datadir_factory.mkdatadir(scope='session')
+@pytest.fixture(scope='class')
+def class_datadir_factory(request, tmp_path_factory):
 
-# the original 'shared_datadir' fixture is just an alias for the
-# 'function_shared_datadir'
+    return DatadirFactory(request, tmp_path_factory)
+
+@pytest.fixture(scope='function')
+def function_datadir_factory(request, tmp_path_factory):
+
+    return DatadirFactory(request, tmp_path_factory)
+
+
+# shared datadirs
+
+@pytest.fixture(scope='module')
+def module_shared_datadir(request, module_datadir_factory):
+
+    return module_datadir_factory.mkdatadir()
+
+@pytest.fixture(scope='class')
+def class_shared_datadir(request, class_datadir_factory):
+
+    return class_datadir_factory.mkdatadir()
+
+@pytest.fixture(scope='function')
+def function_shared_datadir(request, function_datadir_factory):
+
+    return function_datadir_factory.mkdatadir()
+
 shared_datadir = function_shared_datadir
 
 
-# the module datadir is just a call to the factory with None as the
-# original_datadir
-function_datadir = datadir_factory.mkdatadir(scope='function',
-                                             original_datadir=None)
-class_datadir = datadir_factory.mkdatadir(scope='class',
-                                          original_datadir=None)
-module_datadir = datadir_factory.mkdatadir(scope='module',
-                                           original_datadir=None)
-session_datadir = datadir_factory.mkdatadir(scope='session',
-                                            original_datadir=None)
+# test module datadirs
 
-# the original 'datadir' fixture is just an alias for the
-# 'function_datadir'
+@pytest.fixture(scope='module')
+def module_datadir(request, module_datadir_factory):
+
+    return module_datadir_factory.mkdatadir(original_datadir=None)
+
+@pytest.fixture(scope='class')
+def class_datadir(request, class_datadir_factory):
+
+    return class_datadir_factory.mkdatadir(original_datadir=None)
+
+@pytest.fixture(scope='function')
+def function_datadir(request, function_datadir_factory):
+
+    return function_datadir_factory.mkdatadir(original_datadir=None)
+
 datadir = function_datadir
