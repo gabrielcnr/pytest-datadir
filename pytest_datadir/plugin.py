@@ -10,6 +10,10 @@ else:
 
 import pytest
 
+# the datadir factory uses a tmp_path_factory to get a temp dir. This
+# is the name of the dir within the tempdir tree to use for datadir,
+# since these are potentially session scoped fixtures
+DATADIR_DIRNAME = 'datadir'
 
 def _win32_longpath(path):
     '''
@@ -29,6 +33,7 @@ def _win32_longpath(path):
 @pytest.fixture
 def original_datadir(request):
     return Path(os.path.splitext(request.module.__file__)[0])
+
 
 
 class DatadirFactory(object):
@@ -52,8 +57,13 @@ class DatadirFactory(object):
         original_path = Path(self.request.fspath.dirname) / original_datadir
 
         # make sure that the path exists and it is a directory
+        exists = True
         if not original_path.exists():
-            raise ValueError("datadir path does not exist")
+            # raise the flag that it doesn't exist so we can generate
+            # a directory for it instead of copying
+            exists = False
+
+        # make sure the path is a directory if it exists
         elif not original_path.is_dir():
             raise ValueError("datadir path is not a directory")
 
@@ -62,15 +72,23 @@ class DatadirFactory(object):
 
         # in order to use the shutil.copytree util the target directory
         # must not exist so we specify a dir in the generated tempdir for it
-        temp_data_path = temp_path / 'data'
+        temp_data_path = temp_path / DATADIR_DIRNAME
 
         # windows-ify the paths
         original_path = Path(_win32_longpath(original_path))
         temp_data_path = Path(_win32_longpath(str(temp_data_path)))
 
-        # copy all the files in the original data dir to the temp
-        # dir
-        shutil.copytree(original_path, temp_data_path)
+        # copy or create empty directory depending on whether the
+        # original one exists
+        if exists:
+
+            # copy all the files in the original data dir to the temp
+            # dir
+            shutil.copytree(original_path, temp_data_path)
+
+        else:
+            # otherwise just give them a fallback tmpdir
+            temp_data_path.mkdir()
 
         return temp_data_path
 
