@@ -74,21 +74,50 @@ class DatadirFactory(object):
 
         return temp_data_path
 
+# to clean up for the different scopes we need tmp_path_factory to be
+# scoped differently; just copy the code from module and change the
+# decorator
+
+@pytest.fixture(scope="session")
+def session_tmp_path_factory(request):
+    """Return a :class:`_pytest.tmpdir.TempPathFactory` instance for the test session.
+    """
+    return request.config._tmp_path_factory
+
+@pytest.fixture(scope="module")
+def module_tmp_path_factory(request):
+    """Return a :class:`_pytest.tmpdir.TempPathFactory` instance for the test session.
+    """
+    return request.config._tmp_path_factory
+
+
+@pytest.fixture(scope="class")
+def class_tmp_path_factory(request):
+    """Return a :class:`_pytest.tmpdir.TempPathFactory` instance for the test session.
+    """
+    return request.config._tmp_path_factory
+
+@pytest.fixture(scope="function")
+def function_tmp_path_factory(request):
+    """Return a :class:`_pytest.tmpdir.TempPathFactory` instance for the test session.
+    """
+    return request.config._tmp_path_factory
+
 # scoped factories
 @pytest.fixture(scope='module')
-def module_datadir_factory(request, tmp_path_factory):
+def module_datadir_factory(request, module_tmp_path_factory):
 
-    return DatadirFactory(request, tmp_path_factory)
+    return DatadirFactory(request, module_tmp_path_factory)
 
 @pytest.fixture(scope='class')
-def class_datadir_factory(request, tmp_path_factory):
+def class_datadir_factory(request, class_tmp_path_factory):
 
-    return DatadirFactory(request, tmp_path_factory)
+    return DatadirFactory(request, class_tmp_path_factory)
 
 @pytest.fixture(scope='function')
-def function_datadir_factory(request, tmp_path_factory):
+def function_datadir_factory(request, function_tmp_path_factory):
 
-    return DatadirFactory(request, tmp_path_factory)
+    return DatadirFactory(request, function_tmp_path_factory)
 
 
 # shared datadirs
