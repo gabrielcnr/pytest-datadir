@@ -1,6 +1,11 @@
 pytest-datadir
 ==============
 
+1.4.0 (2019-04-30)
+------------------
+
+- Implements the ``DatadirFactory`` class which exposes the ``mkdatadir`` method that generates datadir fixtures based on the parameters of a scope and the relative path of the datadir which is intended to be copied to the temporary data directory. This allows for datadirs for different scopes other than function. (`#26 <https://github.com/gabrielcnr/pytest-datadir/issues/26>`_).
+
 1.3.0 (2019-01-15)
 ------------------
 
