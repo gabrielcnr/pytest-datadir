@@ -16,10 +16,13 @@ Let's say you have a structure like this:
 .
 ├── data/
 │   └── hello.txt
+├── other_data/
+│   └── other_data.txt
 ├── test_hello/
 │   └── spam.txt
 └── test_hello.py
 ```
+
 You can access the contents of these files using injected variables `datadir` (for *test_* folder) or `shared_datadir`
 (for *data* folder):
 
@@ -36,6 +39,53 @@ def test_read_module(datadir):
 pytest-datadir will copy the original file to a temporary folder, so changing the file contents won't change the original data file.
 
 Both `datadir` and `shared_datadir` fixtures are `pathlib.Path` objects.
+
+
+## Scoped datadirs
+
+By default `datadir` and `shared_datadir` are scoped by function and are actually aliases for `function_datadir` and `function_shared_datadir`.
+
+This library provides scoped `datadirs` and `shared_datadirs` for:
+
+- module
+- class
+- function
+
+
+## datadir factory
+
+Similar to how `tmp_path_factory` works you can also generate temporary datadirs in your code:
+
+```python
+
+def test_read_module(datadir_factory):
+
+    datadir0 = datadir_factory.mkdatadir()
+    contents = (datadir0 / 'spam.txt').read_text()
+    assert contents == 'eggs\n'
+    
+    with open((datadir0 / 'spam.txt'), 'w') as wf:
+        wf.write('ham\n')
+
+    # with a fresh temp datadir
+    datadir1 = datadir_factory.mkdatadir()
+    contents = (datadir1 / 'spam.txt').read_text()
+    assert contents == 'eggs\n'
+
+```
+
+
+Additionally you can also specify which folder you actually want to pull data from beyond the default 'data' dir from the `shared_datadir` fixture:
+
+```python
+
+def test_factory_module(datadir_factory):
+
+    datadir = datadir_factory.mkdatadir('other_data')
+    contents = (datadir / 'other_data.txt').read_text()
+    assert contents == 'fun stuff\n'
+    
+```
 
 # Releases
 

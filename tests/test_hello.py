@@ -65,3 +65,9 @@ def test_shared_directory(shared_datadir):
         contents = fp.read()
     assert contents == 'global contents'
 
+def test_other_shared_directory(datadir_factory):
+
+    datadir = datadir_factory.mkdatadir('other_data')
+    contents = (datadir / 'other_data.txt').read_text()
+    assert contents == 'fun stuff\n'
+

@@ -61,3 +61,6 @@ target/
 .idea/
 
 pytest_datadir/_version.py
+
+# emacs
+*~
