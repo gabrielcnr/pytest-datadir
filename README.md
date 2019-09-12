@@ -51,8 +51,10 @@ This library provides scoped `datadirs` and `shared_datadirs` for:
 - class
 - function
 
+The benefit of using scoped datadirs is that if your data files are large then each test will need to copy them which can be very slow. Using the scoped datadirs will only copy them once for the scope. Be careful though, as any changes to the directory will be seen by other tests in the scope.
 
-## datadir factory
+
+## Datadir factory
 
 Similar to how `tmp_path_factory` works you can also generate temporary datadirs in your code:
 
