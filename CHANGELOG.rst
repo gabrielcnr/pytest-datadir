@@ -1,6 +1,13 @@
 pytest-datadir
 ==============
 
+1.3.1 (2019-10-22)
+------------------
+
+- Add testing for Python 3.7 and 3.8.
+- Add ``python_requires`` to ``setup.py`` so ``pip`` will not try to install ``pytest-datadir`` in incompatible Python versions.
+
+
 1.3.0 (2019-01-15)
 ------------------
 
