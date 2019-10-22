@@ -1,7 +1,7 @@
 import io
 import re
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 with io.open('README.md', encoding='UTF-8') as fp:
@@ -10,12 +10,13 @@ with io.open('README.md', encoding='UTF-8') as fp:
 
 setup(
     name="pytest-datadir",
-    use_scm_version={"write_to": "pytest_datadir/_version.py"},
+    use_scm_version={"write_to": "src/pytest_datadir/_version.py"},
     setup_requires=['setuptools_scm'],
-    packages=['pytest_datadir'],
+    packages=find_packages(where="src"),
     entry_points={
         'pytest11': ['pytest-datadir = pytest_datadir.plugin'],
     },
+    package_dir={"": "src"},
     install_requires=['pytest>=2.7.0'],
     data_files = [("", ["LICENSE"])],
     author='Gabriel Reis',
