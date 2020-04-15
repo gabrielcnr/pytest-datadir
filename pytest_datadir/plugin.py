@@ -10,10 +10,14 @@ else:
 
 import pytest
 
+# Root temp dir name to use for all pytest-datadir directories
+TMPDIR_NAME = "pytest-datadir"
+
 # the datadir factory uses a tmp_path_factory to get a temp dir. This
 # is the name of the dir within the tempdir tree to use for datadir,
 # since these are potentially session scoped fixtures
 DATADIR_DIRNAME = 'datadir'
+
 
 # for the shared datadirs, to maintain backwards compatibility we set these to
 # have the default behavior of using the shared data dir called "data"
@@ -78,7 +82,7 @@ class DatadirFactory(object):
             raise ValueError("datadir path is not a directory")
 
         # generate a base temporary directory and receive the path to it
-        temp_path = self.tmp_path_factory.mktemp('')
+        temp_path = self.tmp_path_factory.mktemp(TMPDIR_NAME)
 
         # in order to use the shutil.copytree util the target directory
         # must not exist so we specify a dir in the generated tempdir for it
