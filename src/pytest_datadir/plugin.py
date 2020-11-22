@@ -33,7 +33,7 @@ def shared_datadir(request, tmpdir):
     return temp_path
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def original_datadir(request):
     return Path(os.path.splitext(request.module.__file__)[0])
 
