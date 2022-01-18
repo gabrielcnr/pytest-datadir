@@ -1,12 +1,12 @@
 pytest-datadir
 ==============
 
-1.3.2 (2022-01-18)
+1.4.0 (2022-01-18)
 ------------------
 
 - Fix package so the ``LICENSE`` file is no longer in the root of the package.
 - Python 3.9 and 3.10 are now officially supported.
-- Python 3.4 and 3.5 are no longer officially supported.
+- Python 2.7, 3.4 and 3.5 are no longer supported.
 
 1.3.1 (2019-10-22)
 ------------------
