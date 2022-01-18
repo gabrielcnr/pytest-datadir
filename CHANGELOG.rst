@@ -1,6 +1,11 @@
 pytest-datadir
 ==============
 
+1.3.2 (2022-01-18)
+------------------
+
+- Fix package so the ``LICENSE`` file is no longer in the root of the package.
+
 1.3.1 (2019-10-22)
 ------------------
 
