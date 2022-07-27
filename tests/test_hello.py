@@ -1,5 +1,22 @@
-from __future__ import unicode_literals
 import os
+import pytest
+from pathlib import Path
+
+@pytest.fixture(autouse=True, scope="module")
+def create_long_file_path():
+    """
+    Create a very long file name to ensure datadir can copy it correctly.
+
+    We don't just create this file in the repository because this makes it 
+    problematic to clone on Windows without LongPaths enabled in the system.
+    """
+    d = Path(__file__).with_suffix("")
+    old_cwd = os.getcwd()
+    try:
+        os.chdir(d)
+        Path('a' * 250 + '.txt').touch()
+    finally:
+        os.chdir(old_cwd)
 
 
 def test_read_hello(datadir):
