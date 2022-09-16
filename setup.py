@@ -1,6 +1,7 @@
 import io
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 with io.open("README.md", encoding="UTF-8") as fp:
     long_description = fp.read()
