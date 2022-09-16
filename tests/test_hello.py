@@ -77,7 +77,7 @@ def test_local_directory(datadir):
     assert filename.is_file()
     with filename.open() as fp:
         contents = fp.read()
-    assert contents == "local contents"
+    assert contents.strip() == "local contents"
 
 
 def test_shared_directory(shared_datadir):
@@ -86,4 +86,4 @@ def test_shared_directory(shared_datadir):
     assert filename.is_file()
     with filename.open() as fp:
         contents = fp.read()
-    assert contents == "global contents"
+    assert contents.strip() == "global contents"
