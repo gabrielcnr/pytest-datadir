@@ -25,12 +25,13 @@ You can access the contents of these files using injected variables `datadir` (f
 
 ```python
 def test_read_global(shared_datadir):
-    contents = (shared_datadir / 'hello.txt').read_text()
-    assert contents == 'Hello World!\n'
+    contents = (shared_datadir / "hello.txt").read_text()
+    assert contents == "Hello World!\n"
+
 
 def test_read_module(datadir):
-    contents = (datadir / 'spam.txt').read_text()
-    assert contents == 'eggs\n'
+    contents = (datadir / "spam.txt").read_text()
+    assert contents == "eggs\n"
 ```
 
 pytest-datadir will copy the original file to a temporary folder, so changing the file contents won't change the original data file.
@@ -53,4 +54,3 @@ Afterwards, update the recipe in [conda-forge/pytest-datadir-feedstock](https://
 # License
 
 MIT.
-
