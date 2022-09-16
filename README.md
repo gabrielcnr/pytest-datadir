@@ -2,10 +2,11 @@
 
 pytest plugin for manipulating test data directories and files.
 
-[![Build Status](https://travis-ci.org/gabrielcnr/pytest-datadir.svg?branch=master)](https://travis-ci.org/gabrielcnr/pytest-datadir)
+[![Build Status](https://github.com/gabrielcnr/pytest-datadir/workflows/build/badge.svg?branch=master)](https://github.com/gabrielcnr/pytest-datadir/workflows/build/badge.svg?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/pytest-datadir.svg)](https://pypi.python.org/pypi/pytest-datadir)
-[![PythonVersions](https://img.shields.io/pypi/pyversions/pytest-datadir.svg)](https://pypi.python.org/pypi/pytest-datadir)
 [![CondaForge](https://img.shields.io/conda/vn/conda-forge/pytest-datadir.svg)](https://anaconda.org/conda-forge/pytest-datadir)
+![Python Version](https://img.shields.io/badge/python-3.6+-blue.svg)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 # Usage
