@@ -11,12 +11,15 @@ with io.open('README.md', encoding='UTF-8') as fp:
 setup(
     name="pytest-datadir",
     use_scm_version={"write_to": "src/pytest_datadir/_version.py"},
-    setup_requires=['setuptools_scm'],
     packages=find_packages(where="src"),
     entry_points={
         'pytest11': ['pytest-datadir = pytest_datadir.plugin'],
     },
     package_dir={"": "src"},
+    setup_requires=[
+        "setuptools_scm; python_version>'3.6'",
+        "setuptools_scm <7.0; python_version=='3.6'",
+    ],
     install_requires=['pytest>=5.0'],
     author='Gabriel Reis',
     author_email='gabrielcnr@gmail.com',
