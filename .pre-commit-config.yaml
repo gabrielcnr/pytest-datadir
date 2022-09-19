@@ -1,7 +1,7 @@
 exclude: (?x)(\.txt)
 repos:
--   repo: https://github.com/myint/autoflake
-    rev: v1.5.3
+-   repo: https://github.com/PyCQA/autoflake
+    rev: v1.6.0
     hooks:
     -   id: autoflake
         name: autoflake
@@ -38,8 +38,8 @@ repos:
         args: [--autofix]
     -   id: debug-statements
         language_version: python3
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
+-   repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
     hooks:
     -   id: flake8
         exclude: tests/data
