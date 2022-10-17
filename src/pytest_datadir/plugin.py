@@ -22,9 +22,9 @@ def _win32_longpath(path):
 
 
 @pytest.fixture
-def shared_datadir(request, tmpdir):
+def shared_datadir(request, tmp_path):
     original_shared_path = os.path.join(request.fspath.dirname, "data")
-    temp_path = Path(str(tmpdir.join("data")))
+    temp_path = tmp_path / "data"
     shutil.copytree(
         _win32_longpath(original_shared_path), _win32_longpath(str(temp_path))
     )
@@ -37,8 +37,8 @@ def original_datadir(request):
 
 
 @pytest.fixture
-def datadir(original_datadir, tmpdir):
-    result = Path(str(tmpdir.join(original_datadir.stem)))
+def datadir(original_datadir, tmp_path):
+    result = Path(tmp_path / original_datadir.stem)
     if original_datadir.is_dir():
         shutil.copytree(
             _win32_longpath(str(original_datadir)), _win32_longpath(str(result))
