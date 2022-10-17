@@ -1,6 +1,11 @@
 pytest-datadir
 ==============
 
+1.4.1 (UNRELEASED)
+------------------
+- Replace usage of ``tmpdir`` by ``tmp_path`` (`#48 <https://github.com/gabrielcnr/pytest-datadir/pull/48>`__).
+
+
 1.4.0 (2022-01-18)
 ------------------
 
