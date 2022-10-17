@@ -38,7 +38,7 @@ def original_datadir(request):
 
 @pytest.fixture
 def datadir(original_datadir, tmp_path):
-    result = Path(tmp_path / original_datadir.stem)
+    result = tmp_path / original_datadir.stem
     if original_datadir.is_dir():
         shutil.copytree(
             _win32_longpath(str(original_datadir)), _win32_longpath(str(result))
