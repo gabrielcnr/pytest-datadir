@@ -18,7 +18,7 @@ jobs:
             os: ubuntu-20.04
           - python: 3.6
             os: windows-latest
-            tox_env: "py36"  
+            tox_env: "py36"
           - python: "3.7"
             tox_env: "py37"
           - python: "3.8"
@@ -28,7 +28,7 @@ jobs:
           - python: "3.10"
             tox_env: "py310"
           - python: "3.11"
-            tox_env: "py311"  
+            tox_env: "py311"
 
     steps:
     - uses: actions/checkout@v3
