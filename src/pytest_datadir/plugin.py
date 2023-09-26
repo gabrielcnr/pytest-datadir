@@ -18,7 +18,12 @@ def _win32_longpath(path):
         # (See https://docs.microsoft.com/pt-br/windows/desktop/FileIO/naming-a-file)
         normalized = os.path.normpath(path)
         if not normalized.startswith("\\\\?\\"):
-            normalized = "\\\\?\\" + normalized
+            is_unc = normalized.startswith('\\\\')
+            # see https://en.wikipedia.org/wiki/Path_(computing)#Universal_Naming_Convention # noqa: E501
+            if is_unc:  # then we need to insert an additional "UNC\" to the longpath prefix
+                normalized = normalized.replace('\\\\', '\\\\?\\UNC\\')
+            else:
+                normalized = "\\\\?\\" + normalized
         return normalized
     else:
         return path
