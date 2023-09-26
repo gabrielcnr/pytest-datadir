@@ -16,7 +16,10 @@ def _win32_longpath(path):
         # to a path string tells the Windows APIs to disable all string parsing
         # and to send the string that follows it straight to the file system".
         # (See https://docs.microsoft.com/pt-br/windows/desktop/FileIO/naming-a-file)
-        return "\\\\?\\" + os.path.normpath(path)
+        normalized = os.path.normpath(path)
+        if not normalized.startswith("\\\\?\\"):
+            normalized = "\\\\?\\" + normalized
+        return normalized
     else:
         return path
 
