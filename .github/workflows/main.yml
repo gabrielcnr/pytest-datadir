@@ -1,6 +1,17 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - "test-me-*"
+
+  pull_request:
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -10,17 +21,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12-dev"]
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
-          - python: "3.6"
-            tox_env: "py36"
-            os: ubuntu-20.04
-          - python: 3.6
-            os: windows-latest
-            tox_env: "py36"
-          - python: "3.7"
-            tox_env: "py37"
           - python: "3.8"
             tox_env: "py38"
           - python: "3.9"
@@ -29,6 +32,8 @@ jobs:
             tox_env: "py310"
           - python: "3.11"
             tox_env: "py311"
+          - python: "3.12-dev"
+            tox_env: "py312"
 
     steps:
     - uses: actions/checkout@v3
