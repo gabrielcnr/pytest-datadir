@@ -1,8 +1,14 @@
 pytest-datadir
 ==============
 
+UNRELEASED
+----------
+
+- Fix handling of UNC paths on Windows (`#33 <https://github.com/gabrielcnr/pytest-datadir/issues/33>`__).
+
 1.4.1 (2022-10-24)
 ------------------
+
 - Replace usage of ``tmpdir`` by ``tmp_path`` (`#48 <https://github.com/gabrielcnr/pytest-datadir/pull/48>`__).
 
 
