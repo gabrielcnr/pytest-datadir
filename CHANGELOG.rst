@@ -4,6 +4,8 @@ pytest-datadir
 UNRELEASED
 ----------
 
+- Added support for Python 3.11 and 3.12.
+- Dropped support for Python 3.7.
 - Fix handling of UNC paths on Windows (`#33 <https://github.com/gabrielcnr/pytest-datadir/issues/33>`__).
 
 1.4.1 (2022-10-24)
