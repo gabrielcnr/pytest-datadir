@@ -1,8 +1,8 @@
 pytest-datadir
 ==============
 
-UNRELEASED
-----------
+1.5.0 (2023-10-02)
+------------------
 
 - Added support for Python 3.11 and 3.12.
 - Dropped support for Python 3.7.
