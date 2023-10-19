@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools >=61", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytest-datadir"
+authors = [
+    { name = "Gabriel Reis", email = "gabrielcnr@gmail.com" },
+]
+description = "pytest plugin for test data directories and files"
+keywords = ["pytest", "test", "unittest", "directory", "file"]
+license = { text = "MIT" }
+urls = {Homepage = "http://github.com/gabrielcnr/pytest-datadir"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+dynamic = ["version"]
+requires-python = ">=3.8"
+dependencies = [
+    "pytest>=5.0",
+]
+
+[project.entry-points.pytest11]
+pytest-datadir = "pytest_datadir.plugin"
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "tox",
+]
+dev = [
+    "pytest-datadir[testing]",
+    "pre-commit",
+]
+
+[tool.setuptools_scm]
+write_to = "src/pytest_datadir/_version.py"
+
+[tool.setuptools.packages.find]
+include = ["pytest_datadir", "pytest_datadir.*"]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
