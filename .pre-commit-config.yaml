@@ -1,7 +1,7 @@
 exclude: (?x)(\.txt)
 repos:
 -   repo: https://github.com/PyCQA/autoflake
-    rev: v2.2.1
+    rev: v2.3.1
     hooks:
     -   id: autoflake
         name: autoflake
@@ -13,7 +13,7 @@ repos:
     hooks:
     -   id: reorder-python-imports
 -   repo: https://github.com/psf/black
-    rev: 23.11.0
+    rev: 24.3.0
     hooks:
     -   id: black
         args: [--safe, --quiet]
@@ -39,7 +39,7 @@ repos:
     -   id: debug-statements
         language_version: python3
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+    rev: 7.0.0
     hooks:
     -   id: flake8
         exclude: tests/data
