@@ -1,7 +1,6 @@
 import os
 import shutil
 import sys
-from pathlib import Path
 
 import pytest
 
@@ -43,7 +42,7 @@ def shared_datadir(request, tmp_path):
 
 @pytest.fixture
 def original_datadir(request):
-    return Path(os.path.splitext(request.module.__file__)[0])
+    return request.path.parent / request.path.stem
 
 
 @pytest.fixture
