@@ -60,4 +60,4 @@ target/
 # IDEs
 .idea/
 
-pytest_datadir/_version.py
+/src/pytest_datadir/_version.py

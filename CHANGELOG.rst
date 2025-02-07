@@ -1,8 +1,17 @@
 pytest-datadir
 ==============
 
+1.6.1
+-----
+
+*2025-02-07*
+
+- pytest 7.0+ is now required.
+
 1.6.0
 -----
+
+**Note**: this release has been yanked from PyPI due to `#89 <https://github.com/gabrielcnr/pytest-datadir/issues/89>`__.
 
 *2025-02-07*
 
