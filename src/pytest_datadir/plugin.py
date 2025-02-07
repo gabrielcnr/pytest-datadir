@@ -40,7 +40,7 @@ def shared_datadir(request, tmp_path):
     return temp_path
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def original_datadir(request):
     return request.path.parent / request.path.stem
 
