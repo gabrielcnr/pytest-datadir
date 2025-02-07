@@ -1,6 +1,14 @@
 pytest-datadir
 ==============
 
+1.6.0
+-----
+
+*2025-02-07*
+
+- Fixed compatibility with ``pytest-describe``.
+- ``original_datadir`` fixture is now ``module``-scoped.
+
 1.5.0 (2023-10-02)
 ------------------
 
