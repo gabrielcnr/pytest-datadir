@@ -27,7 +27,8 @@ classifiers = [
 dynamic = ["version"]
 requires-python = ">=3.8"
 dependencies = [
-    "pytest>=5.0",
+    # Update tox.ini if the minimum required version changes.
+    "pytest>=7.0",
 ]
 
 [project.entry-points.pytest11]
