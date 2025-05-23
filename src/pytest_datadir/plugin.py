@@ -55,3 +55,16 @@ def datadir(original_datadir, tmp_path):
     else:
         result.mkdir()
     return result
+
+
+@pytest.fixture
+def lazy_datadir(original_datadir, tmp_path):
+    result = tmp_path / original_datadir.stem
+    if not result.is_dir():
+        if original_datadir.is_dir():
+            shutil.copytree(
+                _win32_longpath(str(original_datadir)), _win32_longpath(str(result))
+            )
+        else:
+            result.mkdir()
+    return result
