@@ -4,7 +4,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
 from pytest_datadir.plugin import _win32_longpath
 
 
@@ -40,7 +39,9 @@ def test_read_hello(datadir, lazy_datadir):
     assert contents == "Hello, world!\n"
 
 
-def test_change_test_files(datadir, lazy_datadir, original_datadir, shared_datadir, request):
+def test_change_test_files(
+    datadir, lazy_datadir, original_datadir, shared_datadir, request
+):
     filename = datadir / "hello.txt"
     with filename.open("w") as fp:
         fp.write("Modified text!\n")
@@ -106,7 +107,7 @@ def test_shared_directory(shared_datadir):
 
 @pytest.fixture
 def mock_copytree():
-    with patch('shutil.copytree') as mock:
+    with patch("shutil.copytree") as mock:
         yield mock
 
 
@@ -127,13 +128,13 @@ def eager_create_datadir(original_datadir, tmp_path):
 
 
 def test_lazy_copy_happens_once(eager_create_datadir, mock_copytree, lazy_datadir):
-        # Access the same file multiple times
-        for _ in range(3):
-            _ = lazy_datadir / "hello.txt"
-            
-        # Access the same directory multiple times    
-        for _ in range(3):
-            _ = lazy_datadir / "local_directory"
-        
-        # copytree only called once by eager_create_datadir, not by lazy_datadir
-        assert mock_copytree.call_count == 0
+    # Access the same file multiple times
+    for _ in range(3):
+        _ = lazy_datadir / "hello.txt"
+
+    # Access the same directory multiple times
+    for _ in range(3):
+        _ = lazy_datadir / "local_directory"
+
+    # copytree only called once by eager_create_datadir, not by lazy_datadir
+    assert mock_copytree.call_count == 0
