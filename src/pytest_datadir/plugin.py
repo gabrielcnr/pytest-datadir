@@ -76,7 +76,7 @@ class LazyDataDir:
             other (str): The path to join with the lazy data directory.
 
         Returns:
-            Path: The joined path, copying only relevant files and creating directories as needed.
+            Path: The joined path, without repeat copying any files.
         """
         original = self.original_datadir / other
         target = self.tmp_path / other
@@ -118,14 +118,15 @@ class LazyDataDir:
 def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
     """Returns a temporary lazy data directory.
 
-    Here, "lazy" means that the directory is created on the first use of the fixture, but files are
-    only copied when they are accessed using <lazy_datadir> / <path or filepath> syntax.
+    Here, "lazy" means that the directory is created on the first use of the fixture,
+    but files are only copied when they are accessed using <lazy_datadir> /
+    <path or filepath> syntax.
 
     Args:
         original_datadir (Path): Path object pointing to the original data directory.
-        tmp_path (Path): Fixture provided by pytest that points to a temporary directory.
+        tmp_path (Path): Native pytest fixture pointing to a temporary directory.
 
     Returns:
-        LazyDataDir: A custom class which includes the Path handling for Python division.
+        LazyDataDir: An object that includes Path handling for Python division.
     """
     return LazyDataDir(original_datadir, tmp_path)
