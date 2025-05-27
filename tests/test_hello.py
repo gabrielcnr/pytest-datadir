@@ -129,7 +129,9 @@ def count_calls(func: Callable):
 
 
 def test_lazy_copy_happens_once(lazy_datadir):
-    with count_calls(shutil.copy) as copy_count, count_calls(shutil.copytree) as copytree_count:
+    with count_calls(shutil.copy) as copy_count, count_calls(
+        shutil.copytree
+    ) as copytree_count:
 
         # Access the same file multiple times
         for _ in range(3):

@@ -65,6 +65,7 @@ class LazyDataDir:
     A dataclass to represent a lazy data directory.
     It is used to ensure that the directory is created only when needed.
     """
+
     original_datadir: Path
     tmp_path: Path
 
@@ -73,7 +74,7 @@ class LazyDataDir:
 
         Args:
             other (str): The path to join with the lazy data directory.
-        
+
         Returns:
             Path: The joined path, copying only relevant files and creating directories as needed.
         """
@@ -81,9 +82,13 @@ class LazyDataDir:
         target = self.tmp_path / other
         if not target.exists():
             if original.is_file():
-                shutil.copy(_win32_longpath(str(original)), _win32_longpath(str(target)))
+                shutil.copy(
+                    _win32_longpath(str(original)), _win32_longpath(str(target))
+                )
             elif original.is_dir():
-                shutil.copytree(_win32_longpath(str(original)), _win32_longpath(str(target)))
+                shutil.copytree(
+                    _win32_longpath(str(original)), _win32_longpath(str(target))
+                )
         return target
 
     def __div__(self, other: str) -> Path:
