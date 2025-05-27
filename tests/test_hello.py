@@ -1,10 +1,12 @@
 import os
 import shutil
+import sys
+from contextlib import contextmanager
+from functools import wraps
 from pathlib import Path
-from unittest.mock import patch
+from typing import Callable
 
 import pytest
-from pytest_datadir.plugin import _win32_longpath
 
 
 @pytest.fixture(autouse=True, scope="module")
@@ -105,36 +107,38 @@ def test_shared_directory(shared_datadir):
     assert contents.strip() == "global contents"
 
 
-@pytest.fixture
-def mock_copytree():
-    with patch("shutil.copytree") as mock:
-        yield mock
+@contextmanager
+def count_calls(func: Callable):
+    """Counts how many times an external library function is called."""
+    module = sys.modules[func.__module__]
+    func_name = func.__name__
+    original_func = func
+    call_count = 0
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        return original_func(*args, **kwargs)
+
+    setattr(module, func_name, wrapper)
+    try:
+        yield lambda: call_count
+    finally:
+        setattr(module, func_name, original_func)
 
 
-@pytest.fixture
-def eager_create_datadir(original_datadir, tmp_path):
-    result = tmp_path / original_datadir.stem
-    print(f"vfg2: Lazy datadir: {result}")
-    if not result.is_dir():
-        print("vfg2: Creating lazy datadir...")
-        if original_datadir.is_dir():
-            print("vfg2: Copying original datadir...")
-            print(f"vfg2: is this a mock? {shutil.copytree}")
-            shutil.copytree(
-                _win32_longpath(str(original_datadir)), _win32_longpath(str(result))
-            )
-        else:
-            result.mkdir()
+def test_lazy_copy_happens_once(lazy_datadir):
+    with count_calls(shutil.copy) as copy_count, count_calls(shutil.copytree) as copytree_count:
 
+        # Access the same file multiple times
+        for _ in range(3):
+            _ = lazy_datadir / "hello.txt"
 
-def test_lazy_copy_happens_once(eager_create_datadir, mock_copytree, lazy_datadir):
-    # Access the same file multiple times
-    for _ in range(3):
-        _ = lazy_datadir / "hello.txt"
+        # Access the same directory multiple times
+        for _ in range(3):
+            _ = lazy_datadir / "local_directory"
 
-    # Access the same directory multiple times
-    for _ in range(3):
-        _ = lazy_datadir / "local_directory"
-
-    # copytree only called once by eager_create_datadir, not by lazy_datadir
-    assert mock_copytree.call_count == 0
+        # copy() and copytree() should only be called once
+        assert copy_count() == 1
+        assert copytree_count() == 1

@@ -1,6 +1,8 @@
 import os
 import shutil
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 
 import pytest
 
@@ -57,14 +59,68 @@ def datadir(original_datadir, tmp_path):
     return result
 
 
+@dataclass(frozen=True)
+class LazyDataDir:
+    """
+    A dataclass to represent a lazy data directory.
+    It is used to ensure that the directory is created only when needed.
+    """
+    original_datadir: Path
+    tmp_path: Path
+
+    def joinpath(self, other: str) -> Path:
+        """Helper method to join paths with lazy loading.
+
+        Args:
+            other (str): The path to join with the lazy data directory.
+        
+        Returns:
+            Path: The joined path, copying only relevant files and creating directories as needed.
+        """
+        original = self.original_datadir / other
+        target = self.tmp_path / other
+        if not target.exists():
+            if original.is_file():
+                shutil.copy(_win32_longpath(str(original)), _win32_longpath(str(target)))
+            elif original.is_dir():
+                shutil.copytree(_win32_longpath(str(original)), _win32_longpath(str(target)))
+        return target
+
+    def __div__(self, other: str) -> Path:
+        """Path / Path syntax support for Python < 3.0
+
+        Args:
+            other (str): The path to join with the lazy data directory.
+
+        Returns:
+            Path: The joined path.
+        """
+        return self.joinpath(other)
+
+    def __truediv__(self, other: str) -> Path:
+        """Path / Path syntax support for Python >= 3.0
+
+        Args:
+            other (str): The path to join with the lazy data directory.
+
+        Returns:
+            Path: The joined path.
+        """
+        return self.joinpath(other)
+
+
 @pytest.fixture
-def lazy_datadir(original_datadir, tmp_path):
-    result = tmp_path / original_datadir.stem
-    if not result.is_dir():
-        if original_datadir.is_dir():
-            shutil.copytree(
-                _win32_longpath(str(original_datadir)), _win32_longpath(str(result))
-            )
-        else:
-            result.mkdir()
-    return result
+def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
+    """Returns a temporary lazy data directory.
+
+    Here, "lazy" means that the directory is created on the first use of the fixture, but files are
+    only copied when they are accessed using <lazy_datadir> / <path or filepath> syntax.
+
+    Args:
+        original_datadir (Path): Path object pointing to the original data directory.
+        tmp_path (Path): Fixture provided by pytest that points to a temporary directory.
+
+    Returns:
+        LazyDataDir: A custom class which includes the Path handling for Python division.
+    """
+    return LazyDataDir(original_datadir, tmp_path)
