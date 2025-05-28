@@ -81,7 +81,7 @@ class LazyDataDir:
         """
         original = self.original_datadir / other
         target = self.tmp_path / other
-        if not target.exists():
+        if original.exists() and not target.exists():
             if original.is_file():
                 shutil.copy(
                     _win32_longpath(str(original)), _win32_longpath(str(target))
