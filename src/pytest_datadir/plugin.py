@@ -101,17 +101,16 @@ class LazyDataDir:
 
 @pytest.fixture
 def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
-    """Returns a temporary lazy data directory.
-
-    Here, "lazy" means that the directory is created on the first use of the fixture,
-    but files are only copied when they are accessed using <lazy_datadir> /
-    <path or filepath> syntax.
+    """
+    Return a lazy data directory.
+    
+    Here, "lazy" means that the temporary directory is initially created empty.
+    
+    Files and directories are then copied from the data directory only when first accessed via the ``joinpath`` method 
+    or the ``/`` operator.
 
     Args:
-        original_datadir (Path): Path object pointing to the original data directory.
-        tmp_path (Path): Native pytest fixture pointing to a temporary directory.
-
-    Returns:
-        LazyDataDir: An object that includes Path handling for Python division.
+        original_datadir: The original data directory.
+        tmp_path: Pytest's built-in fixture providing a temporary directory path.
     """
     return LazyDataDir(original_datadir, tmp_path)
