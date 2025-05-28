@@ -63,7 +63,9 @@ def datadir(original_datadir, tmp_path):
 class LazyDataDir:
     """
     A dataclass to represent a lazy data directory.
-    Unlike the datadir fixture, this class copies files and directories to the temporary directory when requested via the `joinpath` method or the `/` operator.
+
+    Unlike the datadir fixture, this class copies files and directories to the
+    temporary directory when requested via the `joinpath` method or the `/` operator.
     """
 
     original_datadir: Path
@@ -73,11 +75,11 @@ class LazyDataDir:
         """
         Return `other` joined with the temporary directory.
 
-        If `other` exists in the data directory, the corresponding file or directory is copied
-        to the temporary directory before being returned.
+        If `other` exists in the data directory, the corresponding file or directory is
+        copied to the temporary directory before being returned.
 
-        Note that the file or directory is only copied once per test. Subsequent calls with
-        the same argument within the same test will not trigger another copy.
+        Note that the file or directory is only copied once per test. Subsequent calls
+        with the same argument within the same test will not trigger another copy.
         """
         original = self.original_datadir / other
         target = self.tmp_path / other
@@ -103,8 +105,8 @@ def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
 
     Here, "lazy" means that the temporary directory is initially created empty.
 
-    Files and directories are then copied from the data directory only when first accessed via the ``joinpath`` method
-    or the ``/`` operator.
+    Files and directories are then copied from the data directory only when first
+    accessed via the ``joinpath`` method or the ``/`` operator.
 
     Args:
         original_datadir: The original data directory.
