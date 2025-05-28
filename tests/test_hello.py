@@ -37,12 +37,13 @@ def test_change_test_files(datadir, original_datadir, shared_datadir, request):
     filename = datadir / "hello.txt"
     with filename.open("w") as fp:
         fp.write("Modified text!\n")
-    with filename.open() as fp:
-        assert fp.read() == "Modified text!\n"
 
     original_filename = original_datadir / "hello.txt"
     with original_filename.open() as fp:
         assert fp.read() == "Hello, world!\n"
+
+    with filename.open() as fp:
+        assert fp.read() == "Modified text!\n"
 
     shared_filename = shared_datadir / "over.txt"
     with shared_filename.open("w") as fp:
