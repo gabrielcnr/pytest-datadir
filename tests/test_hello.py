@@ -105,7 +105,8 @@ def test_lazy_copy(lazy_datadir):
     # Lazy copy data directory.
     local_dir = lazy_datadir / "local_directory"
     assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
-        "hello.txt", "local_directory"
+        "hello.txt",
+        "local_directory",
     }
     assert local_dir.is_dir() is True
     assert local_dir.joinpath("file.txt").read_text() == "local contents"
@@ -115,5 +116,7 @@ def test_lazy_copy(lazy_datadir):
     assert fn.exists() is False
     fn.write_text("new contents")
     assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
-        "hello.txt", "local_directory", "new-file.txt"
+        "hello.txt",
+        "local_directory",
+        "new-file.txt",
     }
