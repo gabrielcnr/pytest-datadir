@@ -70,13 +70,14 @@ class LazyDataDir:
     tmp_path: Path
 
     def joinpath(self, other: str) -> Path:
-        """Helper method to join paths with lazy loading.
-
-        Args:
-            other (str): The path to join with the lazy data directory.
-
-        Returns:
-            Path: The joined path, without repeat copying any files.
+        """
+        Return `other` joined with the temporary directory.
+    
+        If `other` exists in the data directory, the corresponding file or directory is copied 
+        to the temporary directory before being returned.
+    
+        Note that the file or directory is only copied once per test. Subsequent calls with 
+        the same argument within the same test will not trigger another copy.
         """
         original = self.original_datadir / other
         target = self.tmp_path / other
