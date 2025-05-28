@@ -103,10 +103,10 @@ class LazyDataDir:
 def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
     """
     Return a lazy data directory.
-    
+
     Here, "lazy" means that the temporary directory is initially created empty.
-    
-    Files and directories are then copied from the data directory only when first accessed via the ``joinpath`` method 
+
+    Files and directories are then copied from the data directory only when first accessed via the ``joinpath`` method
     or the ``/`` operator.
 
     Args:
