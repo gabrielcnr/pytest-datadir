@@ -63,7 +63,7 @@ def datadir(original_datadir, tmp_path):
 class LazyDataDir:
     """
     A dataclass to represent a lazy data directory.
-    It is used to ensure that the directory is created only when needed.
+    Unlike the datadir fixture, this class copies files and directories to the temporary directory when requested via the `joinpath` method or the `/` operator.
     """
 
     original_datadir: Path
