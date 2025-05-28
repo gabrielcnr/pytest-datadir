@@ -104,14 +104,6 @@ class LazyDataDir:
         return self.joinpath(other)
 
     def __truediv__(self, other: str) -> Path:
-        """Path / Path syntax support for Python >= 3.0
-
-        Args:
-            other (str): The path to join with the lazy data directory.
-
-        Returns:
-            Path: The joined path.
-        """
         return self.joinpath(other)
 
 
