@@ -1,10 +1,5 @@
 import os
-import shutil
-import sys
-from contextlib import contextmanager
-from functools import wraps
 from pathlib import Path
-from typing import Callable
 
 import pytest
 
@@ -26,7 +21,7 @@ def create_long_file_path():
         os.chdir(old_cwd)
 
 
-def test_read_hello(datadir, lazy_datadir):
+def test_read_hello(datadir):
     assert set(os.listdir(str(datadir))) == {
         "local_directory",
         "hello.txt",
@@ -36,25 +31,14 @@ def test_read_hello(datadir, lazy_datadir):
     with (datadir / "hello.txt").open() as fp:
         contents = fp.read()
     assert contents == "Hello, world!\n"
-    with (lazy_datadir / "hello.txt").open() as fp:
-        contents = fp.read()
-    assert contents == "Hello, world!\n"
 
 
-def test_change_test_files(
-    datadir, lazy_datadir, original_datadir, shared_datadir, request
-):
+def test_change_test_files(datadir, original_datadir, shared_datadir, request):
     filename = datadir / "hello.txt"
     with filename.open("w") as fp:
         fp.write("Modified text!\n")
     with filename.open() as fp:
         assert fp.read() == "Modified text!\n"
-
-    lazy_filename = lazy_datadir / "hello.txt"
-    with lazy_filename.open("w") as fp:
-        fp.write("Modified text again!\n")
-    with lazy_filename.open() as fp:
-        assert fp.read() == "Modified text again!\n"
 
     original_filename = original_datadir / "hello.txt"
     with original_filename.open() as fp:
@@ -75,27 +59,24 @@ def test_read_spam_from_other_dir(shared_datadir):
     assert contents == "eggs\n"
 
 
-def test_file_override(shared_datadir, datadir, lazy_datadir):
+def test_file_override(shared_datadir, datadir):
     """The same file is in the module dir and global data.
     Shared files are kept in a different temp directory"""
     shared_filepath = shared_datadir / "over.txt"
     private_filepath = datadir / "over.txt"
-    lazy_filepath = lazy_datadir / "over.txt"
     assert shared_filepath.is_file()
     assert private_filepath.is_file()
     assert shared_filepath != private_filepath
-    assert lazy_filepath.is_file()
-    assert shared_filepath != lazy_filepath
 
 
-def test_local_directory(datadir, lazy_datadir):
-    for directory in [datadir / "local_directory", lazy_datadir / "local_directory"]:
-        assert directory.is_dir()
-        filename = directory / "file.txt"
-        assert filename.is_file()
-        with filename.open() as fp:
-            contents = fp.read()
-        assert contents.strip() == "local contents"
+def test_local_directory(datadir):
+    directory = datadir / "local_directory"
+    assert directory.is_dir()
+    filename = directory / "file.txt"
+    assert filename.is_file()
+    with filename.open() as fp:
+        contents = fp.read()
+    assert contents.strip() == "local contents"
 
 
 def test_shared_directory(shared_datadir):
@@ -107,40 +88,32 @@ def test_shared_directory(shared_datadir):
     assert contents.strip() == "global contents"
 
 
-@contextmanager
-def count_calls(func: Callable):
-    """Counts how many times an external library function is called."""
-    module = sys.modules[func.__module__]
-    func_name = func.__name__
-    original_func = func
-    call_count = 0
+def test_lazy_copy(lazy_datadir):
+    # The temporary directory starts empty.
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == set()
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        nonlocal call_count
-        call_count += 1
-        return original_func(*args, **kwargs)
+    # Lazy copy file.
+    hello = lazy_datadir / "hello.txt"
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {"hello.txt"}
+    assert hello.read_text() == "Hello, world!\n"
 
-    setattr(module, func_name, wrapper)
-    try:
-        yield lambda: call_count
-    finally:
-        setattr(module, func_name, original_func)
+    # Accessing the same file multiple times does not copy the file again.
+    hello.write_text("Hello world, hello world.")
+    hello = lazy_datadir / "hello.txt"
+    assert hello.read_text() == "Hello world, hello world."
 
+    # Lazy copy data directory.
+    local_dir = lazy_datadir / "local_directory"
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
+        "hello.txt", "local_directory"
+    }
+    assert local_dir.is_dir() is True
+    assert local_dir.joinpath("file.txt").read_text() == "local contents"
 
-def test_lazy_copy_happens_once(lazy_datadir):
-    with count_calls(shutil.copy) as copy_count, count_calls(
-        shutil.copytree
-    ) as copytree_count:
-
-        # Access the same file multiple times
-        for _ in range(3):
-            _ = lazy_datadir / "hello.txt"
-
-        # Access the same directory multiple times
-        for _ in range(3):
-            _ = lazy_datadir / "local_directory"
-
-        # copy() and copytree() should only be called once
-        assert copy_count() == 1
-        assert copytree_count() == 1
+    # It is OK to request a file that does not exist in the data directory.
+    fn = lazy_datadir / "new-file.txt"
+    assert fn.exists() is False
+    fn.write_text("new contents")
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
+        "hello.txt", "local_directory", "new-file.txt"
+    }
