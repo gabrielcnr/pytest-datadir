@@ -10,8 +10,10 @@ pytest plugin for manipulating test data directories and files.
 
 
 # Usage
-pytest-datadir will look up for a directory with the name of your module or the global 'data' folder.
-Let's say you have a structure like this:
+
+`pytest-datadir` automatically looks for a directory matching your module's name or a global `data` folder.
+
+Consider the following directory structure:
 
 ```
 .
@@ -21,8 +23,11 @@ Let's say you have a structure like this:
 │   └── spam.txt
 └── test_hello.py
 ```
-You can access the contents of these files using injected variables `datadir` (for *test_* folder) or `shared_datadir`
-(for *data* folder):
+
+You can access file contents using the injected fixtures:
+
+- `datadir` (for module-specific `test_*` folders)
+- `shared_datadir` (for the global `data` folder)
 
 ```python
 def test_read_global(shared_datadir):
@@ -35,9 +40,21 @@ def test_read_module(datadir):
     assert contents == "eggs\n"
 ```
 
-pytest-datadir will copy the original file to a temporary folder, so changing the file contents won't change the original data file.
+The contents of the data directory are copied to a temporary folder, ensuring safe file modifications without affecting other tests or original files.
 
-Both `datadir` and `shared_datadir` fixtures are `pathlib.Path` objects.
+Both `datadir` and `shared_datadir` fixtures return `pathlib.Path` objects.
+
+## lazy_datadir
+
+Version 1.7.0 introduced the `lazy_datadir` fixture, which only copies files and directories when accessed via the `joinpath` method or the `/` operator.
+
+```python
+def test_read_module(lazy_datadir):
+    contents = (lazy_datadir / "spam.txt").read_text()
+    assert contents == "eggs\n"
+```
+
+Unlike `datadir`, `lazy_datadir` is an object that only implements `joinpath` and `/` operations. While not fully backward-compatible with `datadir`, most tests can switch to `lazy_datadir` without modifications.
 
 # License
 

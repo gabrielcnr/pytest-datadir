@@ -1,6 +1,8 @@
 import os
 import shutil
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 
 import pytest
 
@@ -55,3 +57,59 @@ def datadir(original_datadir, tmp_path):
     else:
         result.mkdir()
     return result
+
+
+@dataclass(frozen=True)
+class LazyDataDir:
+    """
+    A dataclass to represent a lazy data directory.
+
+    Unlike the datadir fixture, this class copies files and directories to the
+    temporary directory when requested via the `joinpath` method or the `/` operator.
+    """
+
+    original_datadir: Path
+    tmp_path: Path
+
+    def joinpath(self, other: str) -> Path:
+        """
+        Return `other` joined with the temporary directory.
+
+        If `other` exists in the data directory, the corresponding file or directory is
+        copied to the temporary directory before being returned.
+
+        Note that the file or directory is only copied once per test. Subsequent calls
+        with the same argument within the same test will not trigger another copy.
+        """
+        original = self.original_datadir / other
+        target = self.tmp_path / other
+        if original.exists() and not target.exists():
+            if original.is_file():
+                shutil.copy(
+                    _win32_longpath(str(original)), _win32_longpath(str(target))
+                )
+            elif original.is_dir():
+                shutil.copytree(
+                    _win32_longpath(str(original)), _win32_longpath(str(target))
+                )
+        return target
+
+    def __truediv__(self, other: str) -> Path:
+        return self.joinpath(other)
+
+
+@pytest.fixture
+def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
+    """
+    Return a lazy data directory.
+
+    Here, "lazy" means that the temporary directory is initially created empty.
+
+    Files and directories are then copied from the data directory only when first
+    accessed via the ``joinpath`` method or the ``/`` operator.
+
+    Args:
+        original_datadir: The original data directory.
+        tmp_path: Pytest's built-in fixture providing a temporary directory path.
+    """
+    return LazyDataDir(original_datadir, tmp_path)

@@ -87,3 +87,37 @@ def test_shared_directory(shared_datadir):
     with filename.open() as fp:
         contents = fp.read()
     assert contents.strip() == "global contents"
+
+
+def test_lazy_copy(lazy_datadir):
+    # The temporary directory starts empty.
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == set()
+
+    # Lazy copy file.
+    hello = lazy_datadir / "hello.txt"
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {"hello.txt"}
+    assert hello.read_text() == "Hello, world!\n"
+
+    # Accessing the same file multiple times does not copy the file again.
+    hello.write_text("Hello world, hello world.")
+    hello = lazy_datadir / "hello.txt"
+    assert hello.read_text() == "Hello world, hello world."
+
+    # Lazy copy data directory.
+    local_dir = lazy_datadir / "local_directory"
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
+        "hello.txt",
+        "local_directory",
+    }
+    assert local_dir.is_dir() is True
+    assert local_dir.joinpath("file.txt").read_text() == "local contents"
+
+    # It is OK to request a file that does not exist in the data directory.
+    fn = lazy_datadir / "new-file.txt"
+    assert fn.exists() is False
+    fn.write_text("new contents")
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
+        "hello.txt",
+        "local_directory",
+        "new-file.txt",
+    }

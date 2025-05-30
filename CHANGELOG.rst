@@ -1,6 +1,14 @@
 pytest-datadir
 ==============
 
+UNRELEASED
+----------
+
+*UNRELEASED*
+
+- New `lazy_datadir` fixture that lazily copies files when accessed via `joinpath` or `/` operator.
+
+
 1.6.1
 -----
 
