@@ -6,7 +6,7 @@ UNRELEASED
 
 *UNRELEASED*
 
-- Fixed bug using ``lazy_datadir`` to copy a file using a sub-directory (e.g, ``lazy_datadir / 'subdir' / 'file.txt'``) (``#99 <https://github.com/gabrielcnr/pytest-datadir/issues/99>`__).
+- Fixed bug using ``lazy_datadir`` to copy a file using a sub-directory (e.g, ``lazy_datadir / 'subdir' / 'file.txt'``) (`#99 <https://github.com/gabrielcnr/pytest-datadir/issues/99>`__).
 
 1.7.0
 ---------
