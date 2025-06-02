@@ -1,15 +1,15 @@
 pytest-datadir
 ==============
 
-UNRELEASED
-------------
+1.7.1
+-----
 
-*UNRELEASED*
+*2025-06-02*
 
 - Fixed bug using ``lazy_datadir`` to copy a file using a sub-directory (e.g, ``lazy_datadir / 'subdir' / 'file.txt'``) (`#99 <https://github.com/gabrielcnr/pytest-datadir/issues/99>`__).
 
 1.7.0
----------
+-----
 
 *2025-05-30*
 
