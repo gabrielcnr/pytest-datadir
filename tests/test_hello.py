@@ -122,6 +122,7 @@ def test_lazy_copy(lazy_datadir):
         "new-file.txt",
     }
 
+
 def test_lazy_copy_sub_directory(lazy_datadir):
     """Copy via file by using a sub-directory (#99)."""
     # The temporary directory starts empty.
