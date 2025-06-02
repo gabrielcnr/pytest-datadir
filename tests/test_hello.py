@@ -121,3 +121,15 @@ def test_lazy_copy(lazy_datadir):
         "local_directory",
         "new-file.txt",
     }
+
+def test_lazy_copy_sub_directory(lazy_datadir):
+    """Copy via file by using a sub-directory (#99)."""
+    # The temporary directory starts empty.
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == set()
+
+    # Lazy copy file in a sub-directory.
+    fn = lazy_datadir / "local_directory/file.txt"
+    assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == {
+        "local_directory",
+    }
+    assert fn.read_text() == "local contents"
