@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 
-def _win32_longpath(path):
+def _win32_longpath(path: str) -> str:
     """
     Helper function to add the long path prefix for Windows, so that shutil.copytree
      won't fail while working with paths with 255+ chars.
@@ -33,7 +33,7 @@ def _win32_longpath(path):
 
 
 @pytest.fixture
-def shared_datadir(request, tmp_path):
+def shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> Path:
     original_shared_path = os.path.join(request.fspath.dirname, "data")
     temp_path = tmp_path / "data"
     shutil.copytree(
@@ -43,12 +43,12 @@ def shared_datadir(request, tmp_path):
 
 
 @pytest.fixture(scope="module")
-def original_datadir(request):
+def original_datadir(request: pytest.FixtureRequest) -> Path:
     return request.path.parent / request.path.stem
 
 
 @pytest.fixture
-def datadir(original_datadir, tmp_path):
+def datadir(original_datadir: Path, tmp_path: Path) -> Path:
     result = tmp_path / original_datadir.stem
     if original_datadir.is_dir():
         shutil.copytree(
