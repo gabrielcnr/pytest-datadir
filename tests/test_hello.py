@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 
 import pytest
+from pytest_datadir.plugin import LazyDataDir
 
 
 @pytest.fixture(autouse=True, scope="module")
-def create_long_file_path():
+def create_long_file_path() -> None:
     """
     Create a very long file name to ensure datadir can copy it correctly.
 
@@ -21,7 +22,7 @@ def create_long_file_path():
         os.chdir(old_cwd)
 
 
-def test_read_hello(datadir):
+def test_read_hello(datadir: Path) -> None:
     assert set(os.listdir(str(datadir))) == {
         "local_directory",
         "hello.txt",
@@ -33,7 +34,12 @@ def test_read_hello(datadir):
     assert contents == "Hello, world!\n"
 
 
-def test_change_test_files(datadir, original_datadir, shared_datadir, request):
+def test_change_test_files(
+    datadir: Path,
+    original_datadir: Path,
+    shared_datadir: Path,
+    request: pytest.FixtureRequest,
+) -> None:
     filename = datadir / "hello.txt"
     with filename.open("w") as fp:
         fp.write("Modified text!\n")
@@ -53,14 +59,14 @@ def test_change_test_files(datadir, original_datadir, shared_datadir, request):
         assert fp.read().strip() == "8000"
 
 
-def test_read_spam_from_other_dir(shared_datadir):
+def test_read_spam_from_other_dir(shared_datadir: Path) -> None:
     filename = shared_datadir / "spam.txt"
     with filename.open() as fp:
         contents = fp.read()
     assert contents == "eggs\n"
 
 
-def test_file_override(shared_datadir, datadir):
+def test_file_override(shared_datadir: Path, datadir: Path) -> None:
     """The same file is in the module dir and global data.
     Shared files are kept in a different temp directory"""
     shared_filepath = shared_datadir / "over.txt"
@@ -70,7 +76,7 @@ def test_file_override(shared_datadir, datadir):
     assert shared_filepath != private_filepath
 
 
-def test_local_directory(datadir):
+def test_local_directory(datadir: Path) -> None:
     directory = datadir / "local_directory"
     assert directory.is_dir()
     filename = directory / "file.txt"
@@ -80,7 +86,7 @@ def test_local_directory(datadir):
     assert contents.strip() == "local contents"
 
 
-def test_shared_directory(shared_datadir):
+def test_shared_directory(shared_datadir: Path) -> None:
     assert shared_datadir.is_dir()
     filename = shared_datadir / "shared_directory" / "file.txt"
     assert filename.is_file()
@@ -89,7 +95,7 @@ def test_shared_directory(shared_datadir):
     assert contents.strip() == "global contents"
 
 
-def test_lazy_copy(lazy_datadir):
+def test_lazy_copy(lazy_datadir: LazyDataDir) -> None:
     # The temporary directory starts empty.
     assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == set()
 
@@ -123,7 +129,7 @@ def test_lazy_copy(lazy_datadir):
     }
 
 
-def test_lazy_copy_sub_directory(lazy_datadir):
+def test_lazy_copy_sub_directory(lazy_datadir: LazyDataDir) -> None:
     """Copy via file by using a sub-directory (#99)."""
     # The temporary directory starts empty.
     assert {x.name for x in lazy_datadir.tmp_path.iterdir()} == set()
