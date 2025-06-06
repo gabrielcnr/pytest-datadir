@@ -34,7 +34,12 @@ def test_read_hello(datadir: Path) -> None:
     assert contents == "Hello, world!\n"
 
 
-def test_change_test_files(datadir: Path, original_datadir: Path, shared_datadir: Path, request: pytest.FixtureRequest) -> None:
+def test_change_test_files(
+    datadir: Path,
+    original_datadir: Path,
+    shared_datadir: Path,
+    request: pytest.FixtureRequest,
+) -> None:
     filename = datadir / "hello.txt"
     with filename.open("w") as fp:
         fp.write("Modified text!\n")
