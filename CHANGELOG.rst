@@ -1,10 +1,10 @@
 pytest-datadir
 ==============
 
-UNRELEASED
+1.7.2
 ----------
 
-*UNRELEASED
+*2025-06-06*
 
 - ``py.typed`` was added to the distribution, enabling users to use ``LazyDataDir`` in type annotations.
 
