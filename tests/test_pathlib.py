@@ -1,8 +1,7 @@
 import sys
-
-import pytest
 from pathlib import Path
 
+import pytest
 from pytest_datadir.plugin import _win32_longpath
 
 
