@@ -44,7 +44,7 @@ def shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> Path:
 
 @pytest.fixture(scope="module")
 def original_datadir(request: pytest.FixtureRequest) -> Path:
-    return Path(request.path).parent / request.path.stem
+    return Path(request.path).with_suffix("")
 
 
 @pytest.fixture
