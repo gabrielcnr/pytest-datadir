@@ -55,5 +55,8 @@ write_to = "src/pytest_datadir/_version.py"
 include = ["pytest_datadir", "pytest_datadir.*"]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"pytest_datadir" = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
