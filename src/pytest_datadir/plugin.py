@@ -71,7 +71,7 @@ class LazyDataDir:
     original_datadir: Path
     tmp_path: Path
 
-    def joinpath(self, other: str) -> Path:
+    def joinpath(self, other: Path | str) -> Path:
         """
         Return `other` joined with the temporary directory.
 
