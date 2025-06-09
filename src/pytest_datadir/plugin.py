@@ -95,7 +95,7 @@ class LazyDataDir:
                 )
         return target
 
-    def __truediv__(self, other: str) -> Path:
+    def __truediv__(self, other: Path | str) -> Path:
         return self.joinpath(other)
 
 
