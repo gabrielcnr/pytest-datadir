@@ -106,7 +106,7 @@ def test_lazy_copy(lazy_datadir: LazyDataDir) -> None:
 
     # Accessing the same file multiple times does not copy the file again.
     hello.write_text("Hello world, hello world.")
-    hello = lazy_datadir / "hello.txt"
+    hello = lazy_datadir / Path("hello.txt")
     assert hello.read_text() == "Hello world, hello world."
 
     # Lazy copy data directory.
