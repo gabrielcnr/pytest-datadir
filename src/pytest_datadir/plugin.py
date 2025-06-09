@@ -3,6 +3,7 @@ import shutil
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
 
 import pytest
 
@@ -71,7 +72,7 @@ class LazyDataDir:
     original_datadir: Path
     tmp_path: Path
 
-    def joinpath(self, other: Path | str) -> Path:
+    def joinpath(self, other: Union[Path, str]) -> Path:
         """
         Return `other` joined with the temporary directory.
 
@@ -95,7 +96,7 @@ class LazyDataDir:
                 )
         return target
 
-    def __truediv__(self, other: Path | str) -> Path:
+    def __truediv__(self, other: Union[Path, str]) -> Path:
         return self.joinpath(other)
 
 
