@@ -1,8 +1,15 @@
 pytest-datadir
 ==============
 
-1.7.2
+UNRELEASED
 ----------
+
+*UNRELEASED*
+
+- Fix ``LazyDataDir.joinpath`` typing to also support ``Path`` objects as the right-hand side parameter.
+
+1.7.2
+-----
 
 *2025-06-06*
 
