@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass
+from os import mkdir
 from pathlib import Path
 from typing import Union
 
@@ -133,5 +134,6 @@ def lazy_shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> LazyD
     """
     original_shared_path = Path(os.path.join(request.fspath.dirname, "data"))
     temp_path = tmp_path / "data"
+    temp_path.mkdir(parents=True, exist_ok=False)
 
     return LazyDataDir(original_shared_path, temp_path)
