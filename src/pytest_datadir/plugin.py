@@ -115,3 +115,22 @@ def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
         tmp_path: Pytest's built-in fixture providing a temporary directory path.
     """
     return LazyDataDir(original_datadir, tmp_path)
+
+@pytest.fixture
+def lazy_shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> LazyDataDir:
+    """
+    Return a lazy version of the shared data directory.
+
+    Here, "lazy" means that the temporary directory is initially created empty.
+
+    Files and directories are then copied from the data directory only when first
+    accessed via the ``joinpath`` method or the ``/`` operator.
+
+    Args:
+        request: The Pytest fixture request object.
+        tmp_path: Pytest's built-in fixture providing a temporary directory path.
+    """
+    original_shared_path = Path(os.path.join(request.fspath.dirname, "data"))
+    temp_path = tmp_path / "data"
+
+    return LazyDataDir(original_shared_path, temp_path)
