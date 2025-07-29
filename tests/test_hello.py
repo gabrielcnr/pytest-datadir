@@ -177,7 +177,9 @@ def test_shared_lazy_copy(lazy_shared_datadir: LazyDataDir, tmp_path: Path) -> N
     }
 
 
-def test_shared_lazy_copy_sub_directory(lazy_shared_datadir: LazyDataDir, tmp_path: Path) -> None:
+def test_shared_lazy_copy_sub_directory(
+    lazy_shared_datadir: LazyDataDir, tmp_path: Path
+) -> None:
     """Copy via file by using a sub-directory (#99)."""
     # The temporary directory starts containing only an empty data directory.
     assert {x.name for x in tmp_path.iterdir()} == {"data"}

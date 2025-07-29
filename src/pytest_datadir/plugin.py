@@ -2,7 +2,6 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass
-from os import mkdir
 from pathlib import Path
 from typing import Union
 
