@@ -116,6 +116,7 @@ def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
     """
     return LazyDataDir(original_datadir, tmp_path)
 
+
 @pytest.fixture
 def lazy_shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> LazyDataDir:
     """
