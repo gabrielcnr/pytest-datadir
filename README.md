@@ -56,6 +56,18 @@ def test_read_module(lazy_datadir):
 
 Unlike `datadir`, `lazy_datadir` is an object that only implements `joinpath` and `/` operations. While not fully backward-compatible with `datadir`, most tests can switch to `lazy_datadir` without modifications.
 
+### lazy_shared_datadir
+
+`lazy_shared_datadir` is similar to `lazy_datadir`, but applied to the shared data directory `shared_datadir`.
+That is, instead of copying all files in `shared_datadir`, files are only copied as necessary when accessed via `joinpath` or the `/` operator.
+This allows for a shared data directory to be pulled from lazily in the same manner as `lazy_datadir`.
+
+```python
+def test_read_global(lazy_shared_datadir):
+    contents = (lazy_shared_datadir / "hello.txt").read_text()
+    assert contents == "Hello World!\n"
+```
+
 # License
 
 MIT.

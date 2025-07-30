@@ -140,3 +140,54 @@ def test_lazy_copy_sub_directory(lazy_datadir: LazyDataDir) -> None:
         "local_directory",
     }
     assert fn.read_text() == "local contents"
+
+
+def test_shared_lazy_copy(lazy_shared_datadir: LazyDataDir, tmp_path: Path) -> None:
+    # The temporary directory starts containing only an empty data directory.
+    assert {x.name for x in tmp_path.iterdir()} == {"data"}
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == set()
+
+    # Lazy copy file.
+    spam = lazy_shared_datadir / "spam.txt"
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == {"spam.txt"}
+    assert spam.read_text() == "eggs\n"
+
+    # Accessing the same file multiple times does not copy the file again.
+    spam.write_text("eggs and ham\n")
+    spam = lazy_shared_datadir / Path("spam.txt")
+    assert spam.read_text() == "eggs and ham\n"
+
+    # Lazy copy data directory.
+    shared_dir = lazy_shared_datadir / "shared_directory"
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == {
+        "spam.txt",
+        "shared_directory",
+    }
+    assert shared_dir.is_dir() is True
+    assert shared_dir.joinpath("file.txt").read_text() == "global contents"
+
+    # It is OK to request a file that does not exist in the data directory.
+    fn = lazy_shared_datadir / "new-file.txt"
+    assert fn.exists() is False
+    fn.write_text("new contents")
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == {
+        "spam.txt",
+        "shared_directory",
+        "new-file.txt",
+    }
+
+
+def test_shared_lazy_copy_sub_directory(
+    lazy_shared_datadir: LazyDataDir, tmp_path: Path
+) -> None:
+    """Copy via file by using a sub-directory (#99)."""
+    # The temporary directory starts containing only an empty data directory.
+    assert {x.name for x in tmp_path.iterdir()} == {"data"}
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == set()
+
+    # Lazy copy file in a sub-directory.
+    fn = lazy_shared_datadir / "shared_directory/file.txt"
+    assert {x.name for x in lazy_shared_datadir.tmp_path.iterdir()} == {
+        "shared_directory",
+    }
+    assert fn.read_text() == "global contents"

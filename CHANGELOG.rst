@@ -6,6 +6,7 @@ UNRELEASED
 
 *UNRELEASED*
 
+- New ``lazy_shared_datadir`` fixture, which brings the same lazy functionality as ``lazy_datadir`` for the *shared* directory.
 - Fix ``LazyDataDir.joinpath`` typing to also support ``Path`` objects as the right-hand side parameter.
 
 1.7.2
