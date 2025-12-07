@@ -201,7 +201,10 @@ def test_no_overwrite_existing(tmp_path: Path, lazy_datadir: LazyDataDir) -> Non
     result = tmp_path.joinpath("result.json")
     result.write_text(text)
 
-    with pytest.raises(RuntimeError, match=r"\{tmp_path}/result.json was already created outside of a datadir fixture!"):
+    with pytest.raises(
+        RuntimeError,
+        match=r"\{tmp_path}/result.json was already created outside of a datadir fixture!",
+    ):
         lazy_datadir.joinpath("result.json")
 
     assert result.read_text() == text
