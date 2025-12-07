@@ -191,3 +191,17 @@ def test_shared_lazy_copy_sub_directory(
         "shared_directory",
     }
     assert fn.read_text() == "global contents"
+
+
+def test_no_overwrite_existing(tmp_path: Path, lazy_datadir: LazyDataDir) -> None:
+    """
+    Existing files are not overwritten.
+    """
+    text = '{"result":"actual"}'
+    result = tmp_path.joinpath("result.json")
+    result.write_text(text)
+
+    with pytest.raises(RuntimeError, match=r"\{tmp_path}/result.json was already created outside of a datadir fixture!"):
+        lazy_datadir.joinpath("result.json")
+
+    assert result.read_text() == text

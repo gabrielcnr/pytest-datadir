@@ -1,7 +1,7 @@
 import os
 import shutil
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Union
 
@@ -71,6 +71,7 @@ class LazyDataDir:
 
     original_datadir: Path
     tmp_path: Path
+    _copied: bool = field(default=False, init=False)
 
     def joinpath(self, other: Union[Path, str]) -> Path:
         """
@@ -84,6 +85,12 @@ class LazyDataDir:
         """
         original = self.original_datadir / other
         target = self.tmp_path / other
+        if not self._copied and target.exists():
+            rel_target = target.relative_to(self.tmp_path)
+            raise RuntimeError(
+                f"{{tmp_path}}/{rel_target} was already created outside of a datadir "
+                "fixture!"
+            )
         if original.exists() and not target.exists():
             if original.is_file():
                 target.parent.mkdir(parents=True, exist_ok=True)
@@ -94,6 +101,7 @@ class LazyDataDir:
                 shutil.copytree(
                     _win32_longpath(str(original)), _win32_longpath(str(target))
                 )
+            object.__setattr__(self, "_copied", True)
         return target
 
     def __truediv__(self, other: Union[Path, str]) -> Path:
