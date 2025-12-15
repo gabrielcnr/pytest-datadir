@@ -47,7 +47,7 @@ repos:
             - flake8-builtins==2.1.0
             - flake8-bugbear==23.1.20
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.0
+    rev: v1.19.1
     hooks:
     -   id: mypy
         files: ^(src/|tests/)
