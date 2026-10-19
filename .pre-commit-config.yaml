@@ -1,7 +1,7 @@
 exclude: (?x)(\.txt)
 repos:
 -   repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.3
+    rev: v2.4.0
     hooks:
     -   id: autoflake
         name: autoflake
@@ -9,11 +9,11 @@ repos:
         language: python
         files: \.py$
 -   repo: https://github.com/asottile/reorder-python-imports
-    rev: v3.16.0
+    rev: v3.19.0
     hooks:
     -   id: reorder-python-imports
 -   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.3.1
+    rev: 26.10.1
     hooks:
     -   id: black
         args: [--safe, --quiet]
@@ -37,7 +37,7 @@ repos:
     -   id: debug-statements
         language_version: python3
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 7.4.1
     hooks:
     -   id: flake8
         exclude: tests/data
@@ -47,7 +47,7 @@ repos:
             - flake8-builtins==2.1.0
             - flake8-bugbear==23.1.20
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v2.4.0
     hooks:
     -   id: mypy
         files: ^(src/|tests/)
