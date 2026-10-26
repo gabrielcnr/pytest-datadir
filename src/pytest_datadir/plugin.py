@@ -33,10 +33,18 @@ def _win32_longpath(path: str) -> str:
         return path
 
 
+@pytest.fixture(scope="module")
+def shared_datadir_name() -> str:
+    """Name of the shared data directory, relative to the test module."""
+    return "data"
+
+
 @pytest.fixture
-def shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> Path:
-    original_shared_path = os.path.join(request.fspath.dirname, "data")
-    temp_path = tmp_path / "data"
+def shared_datadir(
+    request: pytest.FixtureRequest, tmp_path: Path, shared_datadir_name: str
+) -> Path:
+    original_shared_path = os.path.join(request.fspath.dirname, shared_datadir_name)
+    temp_path = tmp_path / shared_datadir_name
     shutil.copytree(
         _win32_longpath(original_shared_path), _win32_longpath(str(temp_path))
     )
@@ -118,7 +126,9 @@ def lazy_datadir(original_datadir: Path, tmp_path: Path) -> LazyDataDir:
 
 
 @pytest.fixture
-def lazy_shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> LazyDataDir:
+def lazy_shared_datadir(
+    request: pytest.FixtureRequest, tmp_path: Path, shared_datadir_name: str
+) -> LazyDataDir:
     """
     Return a lazy version of the shared data directory.
 
@@ -130,9 +140,12 @@ def lazy_shared_datadir(request: pytest.FixtureRequest, tmp_path: Path) -> LazyD
     Args:
         request: The Pytest fixture request object.
         tmp_path: Pytest's built-in fixture providing a temporary directory path.
+        shared_datadir_name: Name of the shared data directory.
     """
-    original_shared_path = Path(os.path.join(request.fspath.dirname, "data"))
-    temp_path = tmp_path / "data"
+    original_shared_path = Path(
+        os.path.join(request.fspath.dirname, shared_datadir_name)
+    )
+    temp_path = tmp_path / shared_datadir_name
     temp_path.mkdir(parents=True, exist_ok=False)
 
     return LazyDataDir(original_shared_path, temp_path)

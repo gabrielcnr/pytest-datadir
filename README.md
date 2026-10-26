@@ -44,6 +44,24 @@ The contents of the data directory are copied to a temporary folder, ensuring sa
 
 Both `datadir` and `shared_datadir` fixtures return `pathlib.Path` objects.
 
+## Choosing a shared directory name
+
+Override the `shared_datadir_name` fixture in your `conftest.py` or test module
+to use a shared directory other than `data`:
+
+```python
+import pytest
+
+
+@pytest.fixture(scope="module")
+def shared_datadir_name():
+    return "fixtures"
+```
+
+Both `shared_datadir` and `lazy_shared_datadir` use this name, relative to the
+test module's directory. Relative subdirectories such as `fixtures/common` are
+also supported. The default remains `data`.
+
 ## lazy_datadir
 
 Version 1.7.0 introduced the `lazy_datadir` fixture, which only copies files and directories when accessed via the `joinpath` method or the `/` operator.
