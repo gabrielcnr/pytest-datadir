@@ -1,6 +1,12 @@
 pytest-datadir
 ==============
 
+Unreleased
+----------
+
+- Add ``shared_datadir_name`` so shared data fixtures can use a configurable
+  directory name, including relative subdirectories.
+
 1.8.0
 -----
 
