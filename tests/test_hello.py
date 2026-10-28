@@ -34,6 +34,23 @@ def test_read_hello(datadir: Path) -> None:
     assert contents == "Hello, world!\n"
 
 
+def test_attribute_preservation_of_test_file(
+    datadir: Path,
+    original_datadir: Path,
+    shared_datadir: Path,
+    request: pytest.FixtureRequest,
+) -> None:
+    original_filename = original_datadir / "hello.txt"
+    filename = datadir / "hello.txt"
+    old_attributes = os.stat(original_filename)
+    new_attributes = os.stat(filename)
+    assert new_attributes.st_mode == old_attributes.st_mode
+    assert new_attributes.st_uid == old_attributes.st_uid
+    assert new_attributes.st_gid == old_attributes.st_gid
+    assert new_attributes.st_size == old_attributes.st_size
+    assert new_attributes.st_mtime == old_attributes.st_mtime
+
+
 def test_change_test_files(
     datadir: Path,
     original_datadir: Path,
