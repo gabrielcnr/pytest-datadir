@@ -3,7 +3,7 @@ name: test
 on:
   push:
     branches:
-      - main
+      - master
       - "test-me-*"
 
   pull_request:
