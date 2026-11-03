@@ -9,4 +9,5 @@ Here are the steps on how to make a new release.
     gh workflow run deploy.yml --ref release-VERSION --field version=VERSION
 
    The ``deploy`` job runs in the ``deploy`` environment, so it waits until a maintainer approves it in the Actions tab.
-5. Merge the PR using a **merge commit** (not squash), so the commit tagged by the deploy workflow ends up in ``master``.
+5. The workflow merges the PR at the end, using a merge commit (not squash), so the tagged commit ends up in ``master``.
+   If that step fails, merge the PR manually the same way.
