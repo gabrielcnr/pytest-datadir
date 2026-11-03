@@ -28,6 +28,7 @@ jobs:
     permissions:
       id-token: write  # For PyPI trusted publishers.
       contents: write  # For tag and release notes.
+      pull-requests: write  # For merging the release PR.
 
     steps:
     - uses: actions/checkout@v4
@@ -53,3 +54,13 @@ jobs:
       with:
         files: dist/*
         tag_name: v${{ github.event.inputs.version }}
+
+    - name: Merge release PR
+      env:
+        GH_TOKEN: ${{ github.token }}
+        BRANCH: ${{ github.ref_name }}
+        SHA: ${{ github.sha }}
+      run: |
+        # Merge commit (not squash) so the tagged commit ends up in master;
+        # --match-head-commit refuses to merge if the PR changed since the deploy started.
+        gh pr merge "$BRANCH" --merge --match-head-commit "$SHA"
