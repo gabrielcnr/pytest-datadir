@@ -6,6 +6,7 @@ UNRELEASED
 
 *UNRELEASED*
 
+- Dropped support for Python 3.8, 3.9, and 3.10, as they have reached end-of-life. Python 3.11 is now the minimum supported version.
 - File metadata (size, mtime, etc) is preserved when copying files from the original data directory into the data directory (`#124 <https://github.com/gabrielcnr/pytest-datadir/pull/124>`__).
 
 1.8.0
