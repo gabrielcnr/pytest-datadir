@@ -1,6 +1,13 @@
 pytest-datadir
 ==============
 
+UNRELEASED
+----------
+
+*UNRELEASED*
+
+- File metadata (size, mtime, etc) is preserved when copying files from the original data directory into the data directory (`#124 <https://github.com/gabrielcnr/pytest-datadir/pull/124>`__).
+
 1.8.0
 -----
 

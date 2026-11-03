@@ -87,7 +87,7 @@ class LazyDataDir:
         if original.exists() and not target.exists():
             if original.is_file():
                 target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy(
+                shutil.copy2(
                     _win32_longpath(str(original)), _win32_longpath(str(target))
                 )
             elif original.is_dir():
