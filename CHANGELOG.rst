@@ -7,6 +7,15 @@ Unreleased
 - Add ``shared_datadir_name`` so shared data fixtures can use a configurable
   directory name, including relative subdirectories.
 
+1.9.0
+-----
+
+*2026-11-03*
+
+- Dropped support for Python 3.8, 3.9, and 3.10, as they have reached end-of-life. Python 3.11 is now the minimum supported version (`#126 <https://github.com/gabrielcnr/pytest-datadir/pull/126>`__).
+- Added official support for Python 3.14 and 3.15 (`#126 <https://github.com/gabrielcnr/pytest-datadir/pull/126>`__).
+- File metadata (size, mtime, etc) is preserved when copying files from the original data directory into the data directory (`#124 <https://github.com/gabrielcnr/pytest-datadir/pull/124>`__).
+
 1.8.0
 -----
 
