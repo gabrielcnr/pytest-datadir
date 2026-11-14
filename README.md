@@ -40,7 +40,9 @@ def test_read_module(datadir):
     assert contents == "eggs\n"
 ```
 
-The contents of the data directory are copied to a temporary folder, ensuring safe file modifications without affecting other tests or original files.
+The contents of the data directory are copied into pytest's `tmp_path` for that test, ensuring safe file modifications without affecting other tests or original files.
+
+That folder is `tmp_path` itself, not a subdirectory of it, so a test that asks for both `datadir` and `tmp_path` gets one directory with the copied files already in it.
 
 Both `datadir` and `shared_datadir` fixtures return `pathlib.Path` objects.
 
